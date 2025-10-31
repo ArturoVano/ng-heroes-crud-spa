@@ -1,0 +1,31 @@
+
+.header {
+  height: 5.5rem;
+  background-color: rgb(66, 2, 66, 0.5);
+
+  &__wrapper {
+    height: 100%;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-around;
+    gap: 16rem;
+  }
+
+  &__logo {
+
+  }
+
+  &__auth {
+    display: flex;
+    align-items: center;
+
+    :first-child {
+      margin-right: 1rem;
+    }
+  }
+}
+
+
+
+
+

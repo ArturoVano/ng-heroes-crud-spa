@@ -1,0 +1,28 @@
+
+@use './styles/components';
+@use './styles/layout';
+@use './styles/form';
+
+:root {
+  --neon-purple: #9333ea;
+  --neon-blue: #1E90FF;
+  --neon-green: #6fcfbf;
+  --neon-red: #ff3366;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+body {
+  font-size: 1.4rem;
+}
