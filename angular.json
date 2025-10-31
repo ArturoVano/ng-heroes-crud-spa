@@ -32,7 +32,10 @@
             ],
             "styles": [
               "src/styles.scss"
-            ]
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/styles", "src/styles/abstracts"]
+            }
           },
           "configurations": {
             "production": {

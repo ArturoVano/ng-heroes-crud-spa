@@ -1,14 +1,12 @@
+@use 'abstracts' as *;
 
 .header {
-  height: 5.5rem;
-  background-color: rgb(66, 2, 66, 0.5);
-
   &__wrapper {
+    @include highContainerStyles();
     height: 100%;
-    padding: 1.5rem;
     display: flex;
-    justify-content: space-around;
-    gap: 16rem;
+    justify-content: space-between;
+    align-items: center;
   }
 
   &__logo {
@@ -18,9 +16,30 @@
   &__auth {
     display: flex;
     align-items: center;
+    gap: 1rem;
+  }
+}
 
-    :first-child {
-      margin-right: 1rem;
+.user {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: var(--bg-color-2);
+  border: 1px solid #3a3c44;
+  border-radius: 0.75rem;
+
+  &__logo {
+    height: 2.8rem;
+    width: 2.8rem;
+    background-color: #18274d;
+    border-radius: 30px;
+    position: relative;
+
+    span {
+      @include centerPosition();
+      color: #7aa4ff;
+      font-weight: 600;
     }
   }
 }

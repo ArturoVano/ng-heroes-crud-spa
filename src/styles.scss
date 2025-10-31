@@ -1,5 +1,6 @@
 
 @use './styles/components';
+@use './styles/abstracts';
 @use './styles/layout';
 @use './styles/form';
 
@@ -8,12 +9,20 @@
   --neon-blue: #1E90FF;
   --neon-green: #6fcfbf;
   --neon-red: #ff3366;
+
+  --bg-color-2: #0e1218;
 }
 
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+body {
+  font-size: 1.4rem;
+  // color: #fff;
+  color: black;
 }
 
 img {
@@ -23,6 +32,7 @@ img {
   object-fit: cover;
 }
 
-body {
-  font-size: 1.4rem;
+lucide-icon {
+  display: flex;
+  align-items: center;
 }

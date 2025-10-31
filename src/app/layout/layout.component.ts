@@ -7,14 +7,20 @@ import { FooterComponent } from "./ui/footer/footer.component";
 @Component({
   selector: 'layout',
   template: `
-    <hero-header
-      [username]="'Arturo'"
-      (logout)="logout()"
-    />
+    <header class="header">
+      <hero-header
+        [username]="'Arturo'"
+        (logout)="logout()"
+      />
+    </header>
 
-    <router-outlet />
+    <main class="main">
+      <router-outlet />
+    </main>
 
-    <hero-footer />
+    <footer class="footer">
+      <hero-footer />
+    </footer>
   `,
   imports: [
     RouterOutlet,

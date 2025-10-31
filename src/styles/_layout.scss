@@ -3,9 +3,25 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  // background-color: #000;
 }
 
-.heroes {
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  height: 5.5rem;
+  background: linear-gradient(
+    135deg,
+    rgba(1, 2, 2, 0.5) 0%,
+    #1e2333 100%
+  );
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.main {
   display: block;
   flex: 1;
 }
