@@ -1,5 +1,6 @@
 import { Component, input, OnInit, output } from "@angular/core";
 import { Hero } from "../../../shared/interfaces/hero";
+import { NgClass } from "@angular/common";
 
 @Component({
   selector: 'hero-item',
@@ -10,24 +11,31 @@ import { Hero } from "../../../shared/interfaces/hero";
         <ng-content />
 
         <button class="card" (click)="detail.emit(hero)">
-          <img class="card__image"
-            [src]="'assets/no-image.png'"
-            [alt]="hero.name"
+
+          @if (hero.biography.alignment) {
+            <span
+              class="chip"
+              [ngClass]="'chip--' + hero.biography.alignment"
             >
+              {{ hero.biography.alignment }}
+            </span>
+          }
+
+          <img class="card__image"
+            [src]="'assets/test.jpg'"
+            [alt]="hero.name" />
 
           <div class="card__content">
             <div class="card__info">
-              <h4 class="name">{{ hero.name }}</h4>
-              <p>{{ hero.biography['full-name'] }}</p>
+              <h3 class="name">{{ hero.name }}</h3>
+              <p class="card-subtitle">{{ hero.biography['full-name'] }}</p>
             </div>
             <div class="card__stats">
+              <p class="card-subtitle">{{ 'First appearance' }}</p>
               <p class="first-appearance">
                 {{ hero.biography['first-appearance'] }}
               </p>
 
-              <span class="chip-label">
-                {{ hero.biography.alignment }}
-              </span>
             </div>
           </div>
         </button>
@@ -35,6 +43,7 @@ import { Hero } from "../../../shared/interfaces/hero";
     }
   `,
   styleUrls: ['hero-item.component.scss'],
+  imports: [NgClass]
 })
 export class HeroItemComponent implements OnInit {
   hero = input.required<Hero>();

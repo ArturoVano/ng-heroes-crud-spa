@@ -12,6 +12,7 @@ export type Status = 'pending' | 'loaded' | 'loading';
 
 export interface HeroesState {
   heroes: Hero[],
+  pages: number,
   localHeroes: boolean,
   status: Status,
   error: string | null,
@@ -24,13 +25,15 @@ export class HeroesService {
   private http = inject(HttpClient);
   private localStorage = inject(LOCAL_STORAGE);
 
-  EXTERNAL_HEROES = 80;
+  private EXTERNAL_HEROES = 80;
+  private HEROES_PER_PAGE = 12;
 
   heroSearchControl = new FormControl('');
 
   // state
   private state = signal<HeroesState>({
     heroes: [],
+    pages: 0,
     localHeroes: true,
     status: 'pending',
     error: null
@@ -41,6 +44,7 @@ export class HeroesService {
   localHeroes = computed(() => this.state().localHeroes);
   status = computed(() => this.state().status);
   error = computed(() => this.state().error);
+  pages = computed(() => this.state().pages);
 
   // sources
   add$ = new Subject<AddHero>();
@@ -95,6 +99,7 @@ export class HeroesService {
         this.state.update((state) => ({
           ...state,
           heroes,
+          page: Math.ceil(heroes.length / this.HEROES_PER_PAGE),
           localHeroes,
           status: 'loaded'
         }))

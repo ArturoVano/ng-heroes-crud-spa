@@ -1,4 +1,4 @@
-import { Component, inject, signal } from "@angular/core";
+import { Component, computed, inject, signal } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HeroItemComponent } from "../ui/hero-item/hero-item.component";
 import { ModalComponent } from "../../shared/ui/modal.component";
@@ -7,6 +7,7 @@ import { HeroesService } from "../../shared/data-access/heroes.service";
 import { Hero } from "../../shared/interfaces/hero";
 import { RouterLink } from "@angular/router";
 import { LucideAngularModule, Pencil, Plus, Search } from "lucide-angular";
+import { HeroPaginationComponent } from "../ui/pagination/hero-pagination.component";
 
 
 @Component({
@@ -76,6 +77,12 @@ import { LucideAngularModule, Pencil, Plus, Search } from "lucide-angular";
           />
         </ng-template>
       </modal>
+
+        <hero-pagination
+          [pages]="pagesList()"
+          (changePage)="1"
+        />
+
     </div>
   `,
   imports: [
@@ -83,15 +90,20 @@ import { LucideAngularModule, Pencil, Plus, Search } from "lucide-angular";
     HeroItemComponent,
     ModalComponent,
     HeroDetailComponent,
+    HeroPaginationComponent,
     LucideAngularModule,
     RouterLink
   ],
   styleUrls: ['./heroes.component.scss'],
   host: { class: 'heroes' }
 })
-export default class Heroes {
+export default class Heroes { // ToDo: change to HeroesComponent
   heroesService = inject(HeroesService);
   openDetail = signal<Hero | null>(null);
+  pagesList = computed(() =>
+    Array.from({ length: this.heroesService.pages() },
+    (_, i) => i + 1 )
+  );
 
   readonly pencilIcon = Pencil;
   readonly searchIcon = Search;
