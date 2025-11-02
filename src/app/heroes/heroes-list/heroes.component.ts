@@ -1,13 +1,16 @@
 import { Component, computed, inject, signal } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
+import { RouterLink } from "@angular/router";
+
+import { LucideAngularModule, Pencil, Plus, Search } from "lucide-angular";
+
 import { HeroItemComponent } from "../ui/hero-item/hero-item.component";
 import { ModalComponent } from "../../shared/ui/modal.component";
 import { HeroDetailComponent } from "../ui/hero-detail.component";
 import { HeroesService } from "../../shared/data-access/heroes.service";
 import { Hero } from "../../shared/interfaces/hero";
-import { RouterLink } from "@angular/router";
-import { LucideAngularModule, Pencil, Plus, Search } from "lucide-angular";
-import { HeroPaginationComponent } from "../ui/pagination/hero-pagination.component";
+import { HeroPaginationComponent } from "../../shared/ui/pagination/hero-pagination.component";
+import { PAGINATION_CONFIG } from "../../config/pagination.config";
 
 
 @Component({
@@ -42,9 +45,8 @@ import { HeroPaginationComponent } from "../ui/pagination/hero-pagination.compon
         </button>
       </div>
 
-
       <div class="heroes-grid">
-        @for (hero of heroesService.heroes(); track hero) {
+        @for (hero of paginatedHeroes(); track hero) {
           <hero-item
             [hero]="hero"
             (detail)="openDetail.set(hero)"
@@ -78,11 +80,11 @@ import { HeroPaginationComponent } from "../ui/pagination/hero-pagination.compon
         </ng-template>
       </modal>
 
-        <hero-pagination
-          [pages]="pagesList()"
-          (changePage)="1"
-        />
-
+      <hero-pagination
+        [currentPage]="currentPage()"
+        [totalPages]="totalPages()"
+        (pageChange)="currentPage.set($event); scrollToTop()"
+      />
     </div>
   `,
   imports: [
@@ -97,15 +99,33 @@ import { HeroPaginationComponent } from "../ui/pagination/hero-pagination.compon
   styleUrls: ['./heroes.component.scss'],
   host: { class: 'heroes' }
 })
-export default class Heroes { // ToDo: change to HeroesComponent
+export default class HeroesComponent {
   heroesService = inject(HeroesService);
-  openDetail = signal<Hero | null>(null);
-  pagesList = computed(() =>
-    Array.from({ length: this.heroesService.pages() },
-    (_, i) => i + 1 )
-  );
 
   readonly pencilIcon = Pencil;
   readonly searchIcon = Search;
   readonly plusIcon = Plus;
+  readonly #itemsPerPage = PAGINATION_CONFIG.ITEMS_PER_PAGE;
+
+  currentPage = signal(1);
+  openDetail = signal<Hero | null>(null);
+  totalPages = computed<number>(() => 
+    Math.ceil(
+      this.heroesService.heroes().length / PAGINATION_CONFIG.ITEMS_PER_PAGE
+    )
+  );
+  paginatedHeroes = computed(() => {
+    const allHeroes = this.heroesService.heroes();
+    const start = (this.currentPage() - 1) * this.#itemsPerPage;
+    const end = start + this.#itemsPerPage;
+    
+    return allHeroes.slice(start, end);
+  });
+
+  protected scrollToTop(): void {
+    if (typeof window !== 'undefined' && window.scrollTo) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
 }

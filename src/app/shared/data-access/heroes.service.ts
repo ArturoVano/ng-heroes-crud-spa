@@ -95,15 +95,17 @@ export class HeroesService {
     // reducers
     this.heroesLoaded$
       .pipe(takeUntilDestroyed())
-      .subscribe(({ heroes, localHeroes }) =>
+      .subscribe(({ heroes, localHeroes }) =>{
+        console.log(heroes.length);
+        console.log(Math.ceil(heroes.length / this.HEROES_PER_PAGE));
         this.state.update((state) => ({
           ...state,
           heroes,
-          page: Math.ceil(heroes.length / this.HEROES_PER_PAGE),
+          pages: Math.ceil(heroes.length / this.HEROES_PER_PAGE),
           localHeroes,
-          status: 'loaded'
+          status: 'loaded',
         }))
-      );
+      });
 
     this.error$
       .pipe(takeUntilDestroyed())
