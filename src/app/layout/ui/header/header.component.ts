@@ -19,18 +19,15 @@ import { LogOut, LucideAngularModule } from "lucide-angular";
           <span class="user__name">{{ username() }}</span>
         </div>
         <button class="btn btn-logout" (click)="logout.emit()">
-          <lucide-icon [img]="logoutIcon" />
+          <lucide-icon name="log-out" />
         </button>
       </nav>
     </div>
   `,
   styleUrls: ['header.component.scss'],
   imports: [RouterLink, LucideAngularModule],
-
 })
 export class HeaderComponent {
   username = input<string>();
   logout = output();
-
-  logoutIcon = LogOut;
 }

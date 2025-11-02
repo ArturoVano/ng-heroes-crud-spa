@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterLink } from "@angular/router";
 
-import { LucideAngularModule, Pencil, Plus, Search } from "lucide-angular";
+import { LucideAngularModule } from "lucide-angular";
 
 import { HeroItemComponent } from "../ui/hero-item/hero-item.component";
 import { ModalComponent } from "../../shared/ui/modal.component";
@@ -33,14 +33,14 @@ import { PAGINATION_CONFIG } from "../../config/pagination.config";
               [placeholder]="'Search a hero...'"
               [formControl]="heroesService.heroSearchControl"
             />
-            <lucide-icon class="search-icon" [img]="searchIcon" />
+            <lucide-icon class="search-icon" name="search" />
         </div>
 
         <button
           routerLink="./add"
           class="actions__add btn btn--fill btn--blue"
         >
-          <lucide-icon [img]="plusIcon" />
+          <lucide-icon name="plus" />
           New hero
         </button>
       </div>
@@ -52,7 +52,7 @@ import { PAGINATION_CONFIG } from "../../config/pagination.config";
             (detail)="openDetail.set(hero)"
           >
             <a [routerLink]="['./edit', hero.id]" class="edit-link">
-              <lucide-icon [img]="pencilIcon" />
+              <lucide-icon name="pencil" />
             </a>
           </hero-item>
         } @empty {
@@ -71,6 +71,14 @@ import { PAGINATION_CONFIG } from "../../config/pagination.config";
         }
       </div>
 
+      @if (totalPages()) {
+        <hero-pagination
+          [currentPage]="currentPage()"
+          [totalPages]="totalPages()"
+          (pageChange)="currentPage.set($event)"
+        />
+      }
+
       <modal [isOpen]="!!openDetail()">
         <ng-template>
           <hero-detail
@@ -79,12 +87,6 @@ import { PAGINATION_CONFIG } from "../../config/pagination.config";
           />
         </ng-template>
       </modal>
-
-      <hero-pagination
-        [currentPage]="currentPage()"
-        [totalPages]="totalPages()"
-        (pageChange)="currentPage.set($event); scrollToTop()"
-      />
     </div>
   `,
   imports: [
@@ -102,14 +104,11 @@ import { PAGINATION_CONFIG } from "../../config/pagination.config";
 export default class HeroesComponent {
   heroesService = inject(HeroesService);
 
-  readonly pencilIcon = Pencil;
-  readonly searchIcon = Search;
-  readonly plusIcon = Plus;
   readonly #itemsPerPage = PAGINATION_CONFIG.ITEMS_PER_PAGE;
 
   currentPage = signal(1);
   openDetail = signal<Hero | null>(null);
-  totalPages = computed<number>(() => 
+  totalPages = computed<number>(() =>
     Math.ceil(
       this.heroesService.heroes().length / PAGINATION_CONFIG.ITEMS_PER_PAGE
     )
@@ -118,14 +117,14 @@ export default class HeroesComponent {
     const allHeroes = this.heroesService.heroes();
     const start = (this.currentPage() - 1) * this.#itemsPerPage;
     const end = start + this.#itemsPerPage;
-    
+
     return allHeroes.slice(start, end);
   });
 
-  protected scrollToTop(): void {
-    if (typeof window !== 'undefined' && window.scrollTo) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }
+  // protected scrollToTop(): void {
+    // if (typeof window !== 'undefined' && window.scrollTo) {
+      // window.scrollTo({ top: 0, behavior: 'smooth' });
+    // }
+  // }
 
 }

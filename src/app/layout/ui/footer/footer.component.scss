@@ -12,6 +12,11 @@
     display: flex;
     gap: 1rem;
     justify-content: center;
+
+    a {
+      display: grid;
+      justify-items: center;
+    }
   }
 
   &__copyright {

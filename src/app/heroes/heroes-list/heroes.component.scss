@@ -12,7 +12,8 @@
 
   &__wrapper {
     @include highContainerStyles();
-    padding-top: .8rem;
+    display: grid;
+    gap: 3.12rem;
   }
 }
 
@@ -41,7 +42,6 @@
 }
 
 .heroes-grid {
-  margin-top: 3rem;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
@@ -64,6 +64,7 @@
   padding: 10px 20px;
   background-color: var(--bg-color-2);
   border: 1px solid #3a3c44;
+  color: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(3.5px);
@@ -73,7 +74,6 @@
     outline: 4px solid var(--neon-blue);
   }
 }
-
 
 .edit-link {
   position: absolute;

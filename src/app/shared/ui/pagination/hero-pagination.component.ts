@@ -4,10 +4,11 @@ import { Component, computed, input, output } from "@angular/core";
   selector: 'hero-pagination',
   template: `
     <nav class="pagination" role="navigation" aria-label="Pagination">
-      <button 
+      <button
         [disabled]="currentPage() === 1"
-        class="page-btn arrow" 
+        class="page-btn arrow"
         aria-label="Previous page"
+        (click)="pageChange.emit(currentPage()-1)"
       >
         <span>‹</span>
       </button>
@@ -23,10 +24,11 @@ import { Component, computed, input, output } from "@angular/core";
         </button>
       }
 
-      <button 
+      <button
         [disabled]="currentPage() === totalPages()"
-        class="page-btn arrow" 
+        class="page-btn arrow"
         aria-label="Next page"
+        (click)="pageChange.emit(currentPage()+1)"
       >
         <span>›</span>
       </button>
@@ -39,7 +41,7 @@ export class HeroPaginationComponent {
   totalPages = input.required<number>();
   pageChange = output<number>();
 
-  pages = computed(() => 
+  pages = computed(() =>
     Array.from({ length: this.totalPages() }, (_, i) => i + 1)
   );
 }

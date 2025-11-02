@@ -11,6 +11,7 @@
   --neon-red: #ff3366;
   --grey: #6B7280;
   --bg-color-2: #0e1218;
+  --page-background: oklch(.12 .01 265);
 }
 
 *, *::before, *::after {
@@ -22,7 +23,7 @@
 body {
   font-size: 1.4rem;
   color: #fff;
-  // color: black;
+  background-color: var(--page-background);
 }
 
 img {
@@ -35,5 +36,10 @@ img {
 lucide-icon {
   display: flex;
   align-items: center;
+}
+
+a {
+  color: unset;
+  text-decoration: none;
 }
 

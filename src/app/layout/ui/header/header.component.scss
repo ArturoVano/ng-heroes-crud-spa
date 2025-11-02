@@ -2,11 +2,11 @@
 
 .header {
   &__wrapper {
-    @include highContainerStyles();
     height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    @include highContainerStyles();
   }
 
   &__logo {
