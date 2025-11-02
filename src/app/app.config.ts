@@ -2,11 +2,11 @@ import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListen
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 
-import {  LucideAngularModule, Pencil, Plus, Search, LogOut } from 'lucide-angular';
+import { LucideAngularModule, Pencil, Plus, Search, LogOut, ArrowLeft } from 'lucide-angular';
 import { routes } from './app.routes';
 
 const lucideIcons = {
-  Plus, Search, Pencil, LogOut
+  Plus, Search, Pencil, LogOut, ArrowLeft
 }
 
 export const appConfig: ApplicationConfig = {

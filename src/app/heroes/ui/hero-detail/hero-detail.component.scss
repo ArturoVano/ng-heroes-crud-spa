@@ -1,0 +1,12 @@
+
+.detail {
+  background: #0f0f0f;
+  border-radius: 24px;
+  max-width: 900px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #1a1a1a;
+  box-shadow: 0 0 60px rgba(0, 255, 157, 0.1);
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}

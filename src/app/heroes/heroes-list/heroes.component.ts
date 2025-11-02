@@ -6,7 +6,7 @@ import { LucideAngularModule } from "lucide-angular";
 
 import { HeroItemComponent } from "../ui/hero-item/hero-item.component";
 import { ModalComponent } from "../../shared/ui/modal.component";
-import { HeroDetailComponent } from "../ui/hero-detail.component";
+import { HeroDetailComponent } from "../ui/hero-detail/hero-detail.component";
 import { HeroesService } from "../../shared/data-access/heroes.service";
 import { Hero } from "../../shared/interfaces/hero";
 import { HeroPaginationComponent } from "../../shared/ui/pagination/hero-pagination.component";
