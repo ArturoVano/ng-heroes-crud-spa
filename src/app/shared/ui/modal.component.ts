@@ -1,5 +1,5 @@
 import { Dialog } from "@angular/cdk/dialog";
-import { Component, contentChild, effect, inject, input, TemplateRef } from "@angular/core";
+import { Component, contentChild, effect, inject, input, output, TemplateRef } from "@angular/core";
 
 @Component({
   selector: 'modal',
@@ -8,15 +8,21 @@ import { Component, contentChild, effect, inject, input, TemplateRef } from "@an
 export class ModalComponent {
   private dialog = inject(Dialog);
   isOpen = input.required<boolean>();
+  close = output();
   template = contentChild.required(TemplateRef);
 
-   constructor() {
+  constructor() {
     effect(() => {
       if (this.isOpen()) {
-        this.dialog.open(this.template(), {
+        const dialogRef = this.dialog.open(this.template(), {
           panelClass: 'dialog-container',
-          hasBackdrop: false,
+          // hasBackdrop: true,
         });
+
+        dialogRef.backdropClick.subscribe(() => {
+          console.log("helloooooo")
+          this.close.emit();
+      });
       } else {
         this.dialog.closeAll();
       }

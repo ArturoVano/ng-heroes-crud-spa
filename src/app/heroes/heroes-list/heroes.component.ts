@@ -79,7 +79,7 @@ import { PAGINATION_CONFIG } from "../../config/pagination.config";
         />
       }
 
-      <modal [isOpen]="!!openDetail()">
+      <modal [isOpen]="!!openDetail()" (close)="openDetail.set(null)">
         <ng-template>
           <hero-detail
             [hero]="openDetail()!"

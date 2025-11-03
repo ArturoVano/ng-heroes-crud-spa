@@ -1,12 +1,125 @@
+@use 'abstracts/mixins' as *;
+
 
 .detail {
   background: #0f0f0f;
   border-radius: 24px;
-  max-width: 900px;
-  width: 100%;
-  overflow: hidden;
+  max-width: 50vw;
+  max-height: 70vh;
+  overflow-y: auto;
   position: relative;
   border: 1px solid #1a1a1a;
   box-shadow: 0 0 60px rgba(0, 255, 157, 0.1);
-  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: grid;
+  grid-template-columns: 353px 1fr;
+
+  @include respond(tab-land) {
+    grid-template-columns: 1fr;
+  }
+
+  @include respond(phone) {
+    max-width: unset;
+    max-height: unset;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  &__image {
+    position: relative;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+    overflow: hidden;
+
+    @include respond(tab-land) {
+      height: 300px;
+    }
+
+    .chip {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+  }
+
+  &__details {
+    padding: 40px;
+
+    @include respond(tab-land) {
+      padding: 24px;
+      max-height: calc(100vh - 350px);
+    }
+  }
+
+  &__content {
+    display: grid;
+    gap: 24px;
+  }
+
+  &__block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: #1a1a1a;
+  color: #8a8a8a;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  z-index: 10;
+
+  &:hover {
+    background: #2a2a2a;
+    color: #fff;
+    transform: rotate(90deg);
+  }
+}
+
+
+.hero-name {
+  font-size: 2.6rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.hero-fullname {
+  color: #6b7280;
+  margin-bottom: 32px;
+}
+
+.label {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  // depending if it's good or bad
+  color: #00ff9d;
+  font-weight: 600;
+}
+
+.value {
+  font-size: 1.2rem;
+  color: #d1d5db;
+  line-height: 1.6;
+}
+
+.aliases-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  .alias-tag{
+
+  }
 }

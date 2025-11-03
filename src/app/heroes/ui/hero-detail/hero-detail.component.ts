@@ -27,7 +27,7 @@ import { NgClass } from "@angular/common";
           }
           <img
             class="hero-image"
-            [src]="'assets/images/no-image.png'"
+            [src]="'assets/test.jpg'"
             [alt]="hero.name"
           />
         </div>
@@ -46,7 +46,7 @@ import { NgClass } from "@angular/common";
               <div class="label">Aliases</div>
               <div class="aliases-list">
                 @for (alias of hero.biography.aliases; track $index) {
-                  <span class="alias-tag">{{ alias }}</span>
+                  <span class="chip">{{ alias }}</span>
                 }
               </div>
             </div>
@@ -60,11 +60,6 @@ import { NgClass } from "@angular/common";
                 <div class="label">Publisher</div>
                 <div class="value">DC Comics</div>
             </div>
-
-            <button (click)="close.emit()">
-              <lucide-icon name="arrow-left" />
-              Back to list
-            </button>
           </div>
         </div>
       </div>
@@ -77,3 +72,6 @@ export class HeroDetailComponent {
   hero = input.required<Hero>();
   close = output();
 }
+
+
+
