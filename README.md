@@ -4,10 +4,10 @@ Declarative Angular heroes management app following the best Angular and Sass pr
 
 ## Development server
 
-Clone the proyect
-Execute npm install
-Start backend npm run backend
-Execute the app npm start
+1. Clone the proyect
+2. Execute `npm install`
+3. Start backend `npm run backend`
+4. Execute the app `npm start`
 
 Navigate to `http://localhost:4200/`
 
