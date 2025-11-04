@@ -8,7 +8,7 @@ import { LogOut, LucideAngularModule } from "lucide-angular";
   template: `
     <div class="header__wrapper">
       <div class="header__logo">
-        <a routerLink="/heroes">MyApp</a>
+        <a routerLink="/heroes">HeroApp</a>
       </div>
 
       <nav class="header__auth">

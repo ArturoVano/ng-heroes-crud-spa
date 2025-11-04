@@ -4,128 +4,162 @@ import { HeroesService } from "../../shared/data-access/heroes.service";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { AddHero, Hero } from "../../shared/interfaces/hero";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { CdkListboxModule } from "@angular/cdk/listbox";
-import { ArrowLeft, LucideAngularModule } from "lucide-angular";
+import { LucideAngularModule } from "lucide-angular";
 
 @Component({
   selector: 'manage-hero',
   template: `
-    <div class="manage-hero__header">
-      <h2>
-        {{ heroId() && hero() ? 'Edit ' + hero()!.name : 'Create new hero' }}
-      </h2>
-
-      <button class="btn btn--blue" routerLink="/heroes">
-        <lucide-icon [img]="arrow" />
-        Back to list
-      </button>
-    </div>
-
-    <div class="divider divider__green"></div>
-
-    <div class="manage-hero__container">
-      <img
-        [src]="hero() ? hero() : 'assets/images/no-image.png'"
-        [alt]="hero()" />
-
-      <form class="form-group" [formGroup]="heroForm" (ngSubmit)="onSubmit()">
-
-        <div class="form-field name">
-          <label for="hero-name">Super hero</label>
-          <input
-            id="hero-name"
-            type="text"
-            required
-            formControlName="name"
-            class="show-uppercase"
-          />
-        </div>
-        <div class="form-group biography" formGroupName="biography">
-          <div class="form-field">
-            <label for="full-name">Full name</label>
-            <input
-              id="full-name"
-              type="text"
-              formControlName="full-name"
-            />
-          </div>
-          <div class="form-field">
-            <label for="alter-ego">Alter ego</label>
-            <input
-              id="alter-ego"
-              type="text"
-              formControlName="alter-egos"
-            />
-          </div>
-          <div class="form-field">
-            <label for="appearence">First appearence</label>
-            <input
-              id="first-appearance"
-              type="text"
-              formControlName="first-appearance"
-            />
-          </div>
-          <div class="form-field">
-            <label for="aliases">Aliases</label>
-            <input
-              id="aliases"
-              type="text"
-              formControlName="aliases"
-            />
-          </div>
-          <div class="form-field">
-            <label for="publisher">Publisher</label>
-            <ul cdkListbox
-              formControlName="publisher"
-              id="publisher"
-              aria-labelledby="publisher"
-            >
-              @for (publisher of publishers(); track $index) {
-                <li [cdkOption]="publisher">
-                  {{ publisher }}
-                </li>
-              }
-            </ul>
-          </div>
-          <div class="form-field">
-            <label for="publisher">Alignment</label>
-            <!-- TODO -->
-          </div>
-        </div>
-        <div class="form-field image" formGroupName="image">
-          <label for="image">Image url</label>
-          <input
-            id="image"
-            type="text"
-            formControlName="url"
-          />
+    <div class="manage-hero">
+      <div class="manage-hero__header">
+        <div class="manage-hero__title">
+          <h1 class="hero-title">
+            {{ hero() ? 'Edit ' + hero()!.name : 'Create new hero' }}
+          </h1>
+          <p class="hero-subtitle">{{
+            hero()
+              ? 'Edit a hero to make at your desire'
+              : 'Create a new hero with all their details'
+          }}</p>
         </div>
 
-        <div class="actions">
-          @if (heroId()) {
-            <button
-              class="btn btn--fill btn--red actions__remove"
-              (click)="heroesService.remove$.next(heroId()!)"
-            >
-              Delete
-            </button>
-          }
-          <button
-            class="btn btn--fill btn--blue actions__save"
-            type="submit"
-            [disabled]="heroForm.invalid"
-          >
-            Save
+        <div class="manage-hero__btn">
+          <button class="btn btn--blue" routerLink="/heroes">
+            <lucide-icon name="arrow-left" />
+            Back to list
           </button>
         </div>
-      </form>
+      </div>
+
+      <div class="form-layout">
+
+        <form class="form-group" [formGroup]="heroForm" (ngSubmit)="onSubmit()">
+          <h2 class="form-group__title">Hero Information</h2>
+
+          <div class="form-field name">
+            <label for="hero-name">Super hero</label>
+            <input
+              id="hero-name"
+              type="text"
+              required
+              formControlName="name"
+              class="show-uppercase"
+            />
+          </div>
+          <!-- <div class="form-group biography" formGroupName="biography"> -->
+            <div formGroupName="biography">
+              <div class="form-field">
+                <label for="full-name">Full name</label>
+                <input
+                  id="full-name"
+                  type="text"
+                  formControlName="full-name"
+                />
+              </div>
+              <div class="form-field">
+                <label for="alter-ego">Alter ego</label>
+                <input
+                  id="alter-ego"
+                  type="text"
+                  formControlName="alter-egos"
+                />
+              </div>
+              <div class="form-field">
+                <label for="appearence">First appearence</label>
+                <input
+                  id="appearence"
+                  type="text"
+                  placeholder="e.g., ACTION COMICS #1"
+                  formControlName="first-appearance"
+                />
+              </div>
+              <!-- <div class="form-field">
+                <label for="aliases">Aliases</label>
+                <div class="aliases-input">
+                  <input
+                    id="aliases"
+                    type="text"
+                    formControlName="aliases"
+                    placeholder="Add any alias as yoy want..."
+                  />
+                  <button class="btn">
+                    <lucide-icon name="plus"/>
+                  </button>
+                </div>
+                <div class="aliases-list">
+                  @for (alias of aliases; track $index) {
+                    <div class="chip">
+                      {{ alias }}
+                      <button>
+                        <lucide-icon name="x"></lucide-icon>
+                      </button>
+                    </div>
+                  }
+                </div>
+              </div> -->
+              <div class="form-field">
+                <label for="alignment">Alignment</label>
+
+                <div class="alignment-select">
+                    <button
+                      class="alignment-select__option"
+                      [class.selected]="">
+                      {{ 'Good' }}
+                    </button>
+                    <button
+                    class="alignment-select__option"
+                    [class.selected]="">
+                      {{ 'Bad' }}
+                    </button>
+                </div>
+
+              </div>
+            </div>
+          <div class="form-field image" formGroupName="image">
+            <label for="image">Image url</label>
+            <input
+              id="image"
+              type="text"
+              formControlName="url"
+              placeholder="https://example.com/image.jpg"
+            />
+          </div>
+
+          <div class="actions">
+            @if (heroId()) {
+              <button
+                class="btn btn--fill btn--red actions__remove"
+                (click)="heroesService.remove$.next(heroId()!)"
+              >
+                Delete
+              </button>
+            }
+            <button
+              class="btn btn--fill btn--blue actions__save"
+              type="submit"
+              [disabled]="heroForm.invalid"
+            >
+              Save
+            </button>
+          </div>
+        </form>
+
+        <div class="image-section">
+          <div class="form-group">
+            <div class="image-preview" id="image-preview">
+              <img
+                [src]="hero() ? hero() : 'assets/no-image.png'"
+                [alt]="hero()" />
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   `,
   styleUrl: 'manage-hero.component.scss',
   imports: [
     RouterLink,
     ReactiveFormsModule,
-    CdkListboxModule,
     LucideAngularModule
   ],
 })
@@ -134,8 +168,6 @@ export default class ManageHeroComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private fb = inject(FormBuilder);
-
-  readonly arrow = ArrowLeft;
 
   publishers = toSignal(this.heroesService.getPublishers());
   params = toSignal(this.route.paramMap);
@@ -154,7 +186,7 @@ export default class ManageHeroComponent {
     biography: this.fb.group({
       ['full-name']: [''],
       ['alter-egos']: [''],
-      aliases: [ [''] ],
+      aliases: [ [''], Validators.minLength(3) ],
       ['first-appearance']: [''],
       publisher: ['', Validators.required],
       alignment: ['', Validators.required],
@@ -163,6 +195,11 @@ export default class ManageHeroComponent {
       url: [''],
     })
   });
+
+  get aliases() {
+    const value = this.heroForm.controls.biography.controls.aliases.value
+    return value ?? [];
+  }
 
   constructor() {
     effect(() => {

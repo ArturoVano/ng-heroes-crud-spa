@@ -5,13 +5,16 @@
 @use './styles/form';
 
 :root {
+  --green: #00ff9d;
   --neon-purple: #9333ea;
   --neon-blue: #1E90FF;
   --neon-green: #6fcfbf;
   --neon-red: #ff3366;
   --grey: #6B7280;
-  --bg-color-2: #0e1218;
   --page-background: oklch(.12 .01 265);
+  --bg-color: #0e1218;
+  --bg-color-2: #1a1a1a;
+  --bg-color-3: #2a2a2a;
 }
 
 *, *::before, *::after {
@@ -44,7 +47,11 @@ a {
   text-decoration: none;
 }
 
-
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
 ::-webkit-scrollbar {
   width: 8px;
 }

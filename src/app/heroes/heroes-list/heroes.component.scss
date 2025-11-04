@@ -11,9 +11,9 @@
   }
 
   &__wrapper {
-    @include highContainerStyles();
     display: grid;
     gap: 3.12rem;
+    @include highContainerStyles();
   }
 }
 
@@ -62,7 +62,7 @@
 .search-box {
   width: 100%;
   padding: 10px 20px;
-  background-color: var(--bg-color-2);
+  background-color: var(--bg-color);
   border: 1px solid #3a3c44;
   color: #fff;
   border-radius: 16px;

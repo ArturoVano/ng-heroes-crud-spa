@@ -121,10 +121,4 @@ export default class HeroesComponent {
     return allHeroes.slice(start, end);
   });
 
-  // protected scrollToTop(): void {
-    // if (typeof window !== 'undefined' && window.scrollTo) {
-      // window.scrollTo({ top: 0, behavior: 'smooth' });
-    // }
-  // }
-
 }

@@ -16,6 +16,11 @@
     a {
       display: grid;
       justify-items: center;
+      transition: transform .3s;
+
+      &:hover {
+        transform: translateY(-14px);
+      }
     }
   }
 

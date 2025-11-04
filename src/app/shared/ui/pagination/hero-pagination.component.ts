@@ -1,4 +1,5 @@
 import { Component, computed, input, output } from "@angular/core";
+import { LucideAngularModule } from "lucide-angular";
 
 @Component({
   selector: 'hero-pagination',
@@ -10,7 +11,7 @@ import { Component, computed, input, output } from "@angular/core";
         aria-label="Previous page"
         (click)="pageChange.emit(currentPage()-1)"
       >
-        <span>‹</span>
+        <lucide-icon name="chevron-left" />
       </button>
 
       @for (page of pages(); track page) {
@@ -30,11 +31,12 @@ import { Component, computed, input, output } from "@angular/core";
         aria-label="Next page"
         (click)="pageChange.emit(currentPage()+1)"
       >
-        <span>›</span>
+        <lucide-icon name="chevron-right" />
       </button>
     </nav>
   `,
-  styleUrl: 'hero-pagination.component.scss'
+  styleUrl: 'hero-pagination.component.scss',
+  imports: [LucideAngularModule]
 })
 export class HeroPaginationComponent {
   currentPage = input.required<number>();
