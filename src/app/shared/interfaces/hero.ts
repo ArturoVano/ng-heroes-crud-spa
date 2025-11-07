@@ -36,7 +36,7 @@ export interface Connections {
 }
 
 export interface Image {
-  url?: string;
+  lg?: string;
 }
 
 export interface Powerstats {

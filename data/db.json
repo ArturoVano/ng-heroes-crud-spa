@@ -17,56 +17,55 @@
   ],
   "heroes": [
     {
-      "response": "success",
-      "id": "69",
-      "name": "Batman",
+      "id": 1,
+      "name": "A-Bomb",
+      "slug": "1-a-bomb",
       "powerstats": {
-        "intelligence": "81",
-        "strength": "40",
-        "speed": "29",
-        "durability": "55",
-        "power": "63",
-        "combat": "90"
-      },
-      "biography": {
-        "full-name": "Terry McGinnis",
-        "alter-egos": "No alter egos found.",
-        "aliases": [
-          "Batman II",
-          "The Tomorrow Knight",
-          "The second Dark Knight",
-          "The Dark Knight of Tomorrow",
-          "Batman Beyond"
-        ],
-        "place-of-birth": "Gotham City, 25th Century",
-        "first-appearance": "Batman Beyond #1",
-        "publisher": "DC Comics",
-        "alignment": "good"
+        "intelligence": 38,
+        "strength": 100,
+        "speed": 17,
+        "durability": 80,
+        "power": 24,
+        "combat": 64
       },
       "appearance": {
         "gender": "Male",
         "race": "Human",
         "height": [
-          "5'10",
-          "178 cm"
+          "6'8",
+          "203 cm"
         ],
         "weight": [
-          "170 lb",
-          "77 kg"
+          "980 lb",
+          "441 kg"
         ],
-        "eye-color": "Blue",
-        "hair-color": "Black"
+        "eyeColor": "Yellow",
+        "hairColor": "No Hair"
+      },
+      "biography": {
+        "fullName": "Richard Milhouse Jones",
+        "alterEgos": "No alter egos found.",
+        "aliases": [
+          "Rick Jones"
+        ],
+        "placeOfBirth": "Scarsdale, Arizona",
+        "firstAppearance": "Hulk Vol 2 #2 (April, 2008) (as A-Bomb)",
+        "publisher": "Marvel Comics",
+        "alignment": "good"
       },
       "work": {
-        "occupation": "-",
-        "base": "21st Century Gotham City"
+        "occupation": "Musician, adventurer, author; formerly talk show host",
+        "base": "-"
       },
       "connections": {
-        "group-affiliation": "Batman Family, Justice League Unlimited",
-        "relatives": "Bruce Wayne (biological father), Warren McGinnis (father, deceased), Mary McGinnis (mother), Matt McGinnis (brother)"
+        "groupAffiliation": "Hulk Family; Excelsior (sponsor), Avengers (honorary member); formerly partner of the Hulk, Captain America and Captain Marvel; Teen Brigade; ally of Rom",
+        "relatives": "Marlo Chandler-Jones (wife); Polly (aunt); Mrs. Chandler (mother-in-law); Keith Chandler, Ray Chandler, three unidentified others (brothers-in-law); unidentified father (deceased); Jackie Shorr (alleged mother; unconfirmed)"
       },
-      "image": {
-        "url": "https://www.superherodb.com/pictures2/portraits/10/100/10441.jpg"
+      "images": {
+        "xs": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/xs/1-a-bomb.jpg",
+        "sm": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/1-a-bomb.jpg",
+        "md": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/1-a-bomb.jpg",
+        "lg": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/1-a-bomb.jpg"
       }
     },
     {

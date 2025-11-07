@@ -2,9 +2,45 @@ import { Component, computed, effect, inject } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { HeroesService } from "../../shared/data-access/heroes.service";
 import { toSignal } from "@angular/core/rxjs-interop";
-import { AddHero, Hero } from "../../shared/interfaces/hero";
-import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { Hero } from "../../shared/interfaces/hero";
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import { LucideAngularModule } from "lucide-angular";
+import { HttpClient } from "@angular/common/http";
+
+interface HeroImage {
+  response: string;
+  id: string;
+  name: string;
+  url: string;
+}
+
+interface HeroForm {
+  name: FormControl<string>;
+  biography: {
+    ['full-name']: FormControl<string>;
+    ['alter-egos']: FormControl<string | undefined>;
+    aliases: FormControl<string[] | undefined>;
+    ['first-appearance']: FormControl<string | undefined>;
+    publisher: FormControl<string | undefined>;
+    alignment: FormControl<string | undefined>;
+  };
+  image: {
+    url: FormControl<string>;
+  };
+}
+
+// name: ['', Validators.required],
+//   biography: this.fb.group({
+//     ['full-name']: [''],
+//     ['alter-egos']: [''],
+//     aliases: [ [''], Validators.minLength(3) ],
+//     ['first-appearance']: [''],
+//     publisher: ['', Validators.required],
+//     alignment: ['', Validators.required],
+//   }),
+//   image: this.fb.group({
+//     url: [],
+//   })
 
 @Component({
   selector: 'manage-hero',
@@ -146,9 +182,10 @@ import { LucideAngularModule } from "lucide-angular";
         <div class="image-section">
           <div class="form-group">
             <div class="image-preview" id="image-preview">
-              <img
-                [src]="hero() ? hero() : 'assets/no-image.png'"
-                [alt]="hero()" />
+              <!-- <img
+                [src]="hero()?.image?.lg ? hero()!.image!.lg : 'assets/no-image.png'"
+                [alt]="'Hero image'" 
+                /> -->
             </div>
           </div>
         </div>
@@ -160,7 +197,7 @@ import { LucideAngularModule } from "lucide-angular";
   imports: [
     RouterLink,
     ReactiveFormsModule,
-    LucideAngularModule
+    LucideAngularModule,
   ],
 })
 export default class ManageHeroComponent {
@@ -168,6 +205,7 @@ export default class ManageHeroComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  http = inject(HttpClient);
 
   publishers = toSignal(this.heroesService.getPublishers());
   params = toSignal(this.route.paramMap);
@@ -196,6 +234,7 @@ export default class ManageHeroComponent {
     })
   });
 
+  
   get aliases() {
     const value = this.heroForm.controls.biography.controls.aliases.value
     return value ?? [];
@@ -223,14 +262,19 @@ export default class ManageHeroComponent {
 
   onSubmit(): void {
     if (this.heroForm.invalid) return;
-
+    this.heroForm.controls.image.controls.url;
     if (this.heroId() && this.hero()) {
-      this.heroesService.edit$.next({
-        ...this.hero()!,
-        ...this.heroForm.getRawValue() as Hero
-      });
+      // this.heroesService.edit$.next({
+      //   ...this.hero()!,
+      //   ...this.heroForm.getRawValue() as Hero
+      // });
     } else {
-      this.heroesService.add$.next(this.heroForm.getRawValue() as AddHero);
+      this.heroesService.add$.next(
+        { 
+          ...this.heroForm.getRawValue(),
+          image: { lg: (this.heroForm.getRawValue().image.url ?? undefined) }
+        }
+      );
     }
     // TODO: every source action should first put status to loading
     // to avoid the next if to be true if the API response is slow, and its

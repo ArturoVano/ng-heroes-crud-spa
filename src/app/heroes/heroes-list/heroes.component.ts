@@ -11,6 +11,7 @@ import { HeroesService } from "../../shared/data-access/heroes.service";
 import { Hero } from "../../shared/interfaces/hero";
 import { HeroPaginationComponent } from "../../shared/ui/pagination/hero-pagination.component";
 import { PAGINATION_CONFIG } from "../../config/pagination.config";
+import { take } from "rxjs";
 
 
 @Component({
@@ -62,8 +63,8 @@ import { PAGINATION_CONFIG } from "../../config/pagination.config";
               <p>Try searching with different terms or explore other options</p>
             } @else {
               <h4>There are no heroes</h4>
-              <p>Click to ask for heroes in web</p>
-              <button >
+              <p>Click to ask for heroes from web</p>
+              <button (click)="getNewHeroes()">
                 Ask for heroes
               </button>
             }
@@ -120,5 +121,11 @@ export default class HeroesComponent {
 
     return allHeroes.slice(start, end);
   });
+
+  getNewHeroes() {
+    this.heroesService.getExternalHeroesList()
+    .pipe(take(1))
+    .subscribe();
+  }
 
 }

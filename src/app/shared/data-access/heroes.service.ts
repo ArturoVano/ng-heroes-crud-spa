@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, Injector, signal } from "@angular/core";
-import { AddHero, Hero, RemoveHero } from "../interfaces/hero";
+import { AddHero, Hero, RemoveHero, Response } from "../interfaces/hero";
 import { FormControl } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { catchError, debounceTime, distinctUntilChanged, EMPTY, forkJoin, map, Observable, of, startWith, Subject, switchMap, tap } from "rxjs";
@@ -7,6 +7,7 @@ import { environment } from "../../../environments/environment.development";
 import { provideStorageService, StorageService } from "./storage.service";
 import { HttpClient } from "@angular/common/http";
 import { LOCAL_STORAGE } from "./local-storage.token";
+import { PAGINATION_CONFIG } from "../../config/pagination.config";
 
 export type Status = 'pending' | 'loaded' | 'loading';
 
@@ -26,7 +27,7 @@ export class HeroesService {
   private localStorage = inject(LOCAL_STORAGE);
 
   private EXTERNAL_HEROES = 80;
-  private HEROES_PER_PAGE = 12;
+  private HEROES_PER_PAGE = PAGINATION_CONFIG.ITEMS_PER_PAGE;
 
   heroSearchControl = new FormControl('');
 
@@ -146,6 +147,12 @@ export class HeroesService {
       ).subscribe();
   }
 
+  private filterHeroesByTerm(heroes: Hero[], term: string) {
+    return heroes.filter(({name}) =>
+      name.toLocaleLowerCase().includes(term!.toLocaleLowerCase())
+    );
+  }
+
   getPublishers(): Observable<string[]> {
     let localPublishers = this.localStorage.getItem('publishers');
     if (localPublishers) {
@@ -169,9 +176,30 @@ export class HeroesService {
     );
   }
 
-  private filterHeroesByTerm(heroes: Hero[], term: string) {
-    return heroes.filter(({name}) =>
-      name.toLocaleLowerCase().includes(term!.toLocaleLowerCase())
+
+  getExternalHeroesList(): Observable<boolean> {
+    const heroRequests: Observable<Hero>[] = [];
+    for (let id = 1; id <= this.EXTERNAL_HEROES; id++) {
+      const url = `${environment.externalHeroesUrl}/${id}`;
+      heroRequests.push(this.http.get<Hero>(url));
+    }
+
+    return forkJoin(heroRequests).pipe(
+      switchMap((heroes) => { 
+        const heroRequest = heroes
+          .filter(hero => hero.response === Response.SUCCESS)
+          .map((hero) => 
+            this.storage.add(hero).pipe(
+              catchError(() => of(false)),
+              map(() => true)
+            )
+          );
+
+        return forkJoin(heroRequest).pipe(
+          map((resutls) => resutls.some(result => result === true))
+        );
+      })
     );
   }
+
 }

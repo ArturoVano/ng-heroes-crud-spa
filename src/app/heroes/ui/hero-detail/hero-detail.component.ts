@@ -1,6 +1,5 @@
 import { Component, input, output } from "@angular/core";
 import { Hero } from "../../../shared/interfaces/hero";
-import { LucideAngularModule } from "lucide-angular";
 import { NgClass } from "@angular/common";
 
 
@@ -66,7 +65,7 @@ import { NgClass } from "@angular/common";
     }
   `,
   styleUrl: 'hero-detail.component.scss',
-  imports: [LucideAngularModule, NgClass]
+  imports: [NgClass]
 })
 export class HeroDetailComponent {
   hero = input.required<Hero>();
