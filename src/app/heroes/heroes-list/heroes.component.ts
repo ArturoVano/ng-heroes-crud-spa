@@ -37,13 +37,15 @@ import { take } from "rxjs";
             <lucide-icon class="search-icon" name="search" />
         </div>
 
-        <button
-          routerLink="./add"
-          class="actions__add btn btn--fill btn--blue"
-        >
-          <lucide-icon name="plus" />
-          New hero
-        </button>
+        <div class="actions_add">
+          <button
+            routerLink="./add"
+            class="actions__add btn btn--fill btn--blue"
+          >
+            <lucide-icon name="plus" />
+            New hero
+          </button>
+        </div>
       </div>
 
       <div class="heroes-grid">
@@ -57,15 +59,19 @@ import { take } from "rxjs";
             </a>
           </hero-item>
         } @empty {
-          <div class="no-heroes-card">
+          <div class="empty-state">
             @if (heroesService.localHeroes()) {
-              <h4>Sorry, we couldn't find any heroes matching your search</h4>
-              <p>Try searching with different terms or explore other options</p>
+              <h4 class="empty-state__title">No results found</h4>
+                 <p class="empty-state__description">
+                  We couldn't find any heroes matching your search. Try different terms or explore other options.
+                </p>
             } @else {
-              <h4>There are no heroes</h4>
-              <p>Click to ask for heroes from web</p>
-              <button (click)="getNewHeroes()">
-                Ask for heroes
+              <h4 class="empty-state__title">No heroes available</h4>
+              <p class="empty-state__description">
+                Get started by loading heroes from the web
+              </p>
+              <button class="empty-state__button" (click)="getNewHeroes()">
+                Load Heroes
               </button>
             }
           </div>

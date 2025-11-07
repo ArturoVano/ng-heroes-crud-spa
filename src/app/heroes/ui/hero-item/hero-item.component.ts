@@ -45,16 +45,7 @@ import { NgClass } from "@angular/common";
   styleUrls: ['hero-item.component.scss'],
   imports: [NgClass]
 })
-export class HeroItemComponent implements OnInit {
+export class HeroItemComponent {
   hero = input.required<Hero>();
   detail = output<Hero>();
-
-  ngOnInit() {
-    console.log(this.hero().image?.url)
-  }
-
-handleImageError(event: Event): void {
-  const img = event.target as HTMLImageElement;
-  img.src = 'assets/no-image.png';
-}
 }

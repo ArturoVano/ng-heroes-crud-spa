@@ -180,15 +180,14 @@ export class HeroesService {
   getExternalHeroesList(): Observable<boolean> {
     const heroRequests: Observable<Hero>[] = [];
     for (let id = 1; id <= this.EXTERNAL_HEROES; id++) {
-      const url = `${environment.externalHeroesUrl}/${id}`;
-      heroRequests.push(this.http.get<Hero>(url));
+      heroRequests.push(this.externalStorage.getById(`id/${id}.json`));
     }
 
     return forkJoin(heroRequests).pipe(
-      switchMap((heroes) => { 
+      switchMap((heroes) => {
         const heroRequest = heroes
-          .filter(hero => hero.response === Response.SUCCESS)
-          .map((hero) => 
+          .filter(hero => !!hero)
+          .map((hero) =>
             this.storage.add(hero).pipe(
               catchError(() => of(false)),
               map(() => true)

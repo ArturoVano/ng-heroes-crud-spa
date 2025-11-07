@@ -1,11 +1,11 @@
 
 export interface Hero {
-  response?:    Response;
   id:          string;
   name:         string;
+  slug?: string;
   powerstats?:  Powerstats;
-  biography:    Biography;
   appearance?:  Appearance;
+  biography:    Biography;
   work?:        Work;
   connections?: Connections;
   image?:       Image;

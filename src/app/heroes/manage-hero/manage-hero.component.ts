@@ -3,44 +3,25 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { HeroesService } from "../../shared/data-access/heroes.service";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { Hero } from "../../shared/interfaces/hero";
-import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { LucideAngularModule } from "lucide-angular";
 import { HttpClient } from "@angular/common/http";
 
-interface HeroImage {
-  response: string;
-  id: string;
-  name: string;
-  url: string;
-}
 
-interface HeroForm {
+interface HeroFormModel {
   name: FormControl<string>;
-  biography: {
-    ['full-name']: FormControl<string>;
-    ['alter-egos']: FormControl<string | undefined>;
-    aliases: FormControl<string[] | undefined>;
-    ['first-appearance']: FormControl<string | undefined>;
-    publisher: FormControl<string | undefined>;
-    alignment: FormControl<string | undefined>;
-  };
-  image: {
+  biography: FormGroup<{
+    'full-name': FormControl<string>;
+    'alter-egos': FormControl<string>;
+    aliases: FormControl<string[]>;
+    'first-appearance': FormControl<string>;
+    publisher: FormControl<string>;
+    alignment: FormControl<string>;
+  }>;
+  image: FormGroup<{
     url: FormControl<string>;
-  };
+  }>;
 }
-
-// name: ['', Validators.required],
-//   biography: this.fb.group({
-//     ['full-name']: [''],
-//     ['alter-egos']: [''],
-//     aliases: [ [''], Validators.minLength(3) ],
-//     ['first-appearance']: [''],
-//     publisher: ['', Validators.required],
-//     alignment: ['', Validators.required],
-//   }),
-//   image: this.fb.group({
-//     url: [],
-//   })
 
 @Component({
   selector: 'manage-hero',
@@ -184,7 +165,7 @@ interface HeroForm {
             <div class="image-preview" id="image-preview">
               <!-- <img
                 [src]="hero()?.image?.lg ? hero()!.image!.lg : 'assets/no-image.png'"
-                [alt]="'Hero image'" 
+                [alt]="'Hero image'"
                 /> -->
             </div>
           </div>
@@ -219,22 +200,25 @@ export default class ManageHeroComponent {
       : null
   );
 
-  heroForm = this.fb.group({
-    name: ['', Validators.required],
+  heroForm : FormGroup<HeroFormModel> = this.fb.group({
+    name: this.fb.control('', { validators: Validators.required, nonNullable: true }),
     biography: this.fb.group({
-      ['full-name']: [''],
-      ['alter-egos']: [''],
-      aliases: [ [''], Validators.minLength(3) ],
-      ['first-appearance']: [''],
-      publisher: ['', Validators.required],
-      alignment: ['', Validators.required],
+      'full-name': this.fb.control('', { nonNullable: true }),
+      'alter-egos': this.fb.control('', { nonNullable: true }),
+      aliases: this.fb.control<string[]>([], {
+        validators: Validators.minLength(3),
+        nonNullable: true
+      }),
+      'first-appearance': this.fb.control('', { nonNullable: true }),
+      publisher: this.fb.control('', { validators: Validators.required, nonNullable: true }),
+      alignment: this.fb.control('', { validators: Validators.required, nonNullable: true }),
     }),
     image: this.fb.group({
-      url: [''],
+      url: this.fb.control('', { nonNullable: true }),
     })
   });
 
-  
+
   get aliases() {
     const value = this.heroForm.controls.biography.controls.aliases.value
     return value ?? [];
@@ -261,19 +245,25 @@ export default class ManageHeroComponent {
   }
 
   onSubmit(): void {
-    if (this.heroForm.invalid) return;
-    this.heroForm.controls.image.controls.url;
+    if (this.heroForm.invalid) {
+      this.heroForm.markAllAsTouched();
+      return;
+    };
+
+    const newImage = this.heroForm.controls.image.controls.url.value ?? undefined;
+
     if (this.heroId() && this.hero()) {
-      // this.heroesService.edit$.next({
-      //   ...this.hero()!,
-      //   ...this.heroForm.getRawValue() as Hero
-      // });
+      this.heroesService.edit$.next({
+        ...this.hero()!,
+        ...this.heroForm.getRawValue(),
+        image: { lg: newImage }
+      } as Hero);
     } else {
       this.heroesService.add$.next(
-        { 
+        {
           ...this.heroForm.getRawValue(),
-          image: { lg: (this.heroForm.getRawValue().image.url ?? undefined) }
-        }
+          image: { lg: newImage }
+        } as Hero
       );
     }
     // TODO: every source action should first put status to loading
