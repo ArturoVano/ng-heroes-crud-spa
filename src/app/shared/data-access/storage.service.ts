@@ -36,7 +36,7 @@ export class StorageService<T extends { id: string | number }> {
   }
 
   remove(id: string | number): Observable<T> {
-    return this.http.delete<T>(`${this.baseUrl}/${id}`);
+    return this.http.delete<T>(`${this.baseUrl}/${id.toString()}`);
   }
 
   edit(item: T): Observable<T> {

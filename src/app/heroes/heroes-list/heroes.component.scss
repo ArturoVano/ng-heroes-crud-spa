@@ -43,8 +43,13 @@
     .search-icon {
       position: absolute;
       top: 50%;
-      right: 5%;
+      right: 0;
+      margin-right: 30px;
       transform: translate(50%, -50%);
+
+      // @include respond(tab-land) {
+      //   right: 8%;
+      // }
     }
   }
 }
@@ -54,12 +59,16 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
 
-  @include respond(phone) {
-    grid-template-columns: repeat(2, 1fr);
+  @include respond(tab-land) {
+    grid-template-columns: repeat(3, 1fr);
   }
 
   @include respond(tab-port) {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond(phone) {
+    grid-template-columns: repeat(1, 1fr);
   }
 
   @include respond(big-desktop) {
@@ -80,6 +89,11 @@
 
   &:focus-visible {
     outline: 4px solid var(--neon-blue);
+  }
+
+  &::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
   }
 }
 

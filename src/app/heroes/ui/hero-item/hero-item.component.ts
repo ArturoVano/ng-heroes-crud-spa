@@ -1,4 +1,4 @@
-import { Component, input, OnInit, output } from "@angular/core";
+import { Component, input, output } from "@angular/core";
 import { Hero } from "../../../shared/interfaces/hero";
 import { NgClass } from "@angular/common";
 
@@ -22,18 +22,19 @@ import { NgClass } from "@angular/common";
           }
 
           <img class="card__image"
-            [src]="'assets/test.jpg'"
+            [src]="hero?.images?.lg ? hero.images!.lg : 'assets/no-image.png'"
+            [alt]="'Hero image'"
             [alt]="hero.name" />
 
           <div class="card__content">
             <div class="card__info">
               <h3 class="name">{{ hero.name }}</h3>
-              <p class="card-subtitle">{{ hero.biography['full-name'] }}</p>
+              <p class="card-subtitle">{{ hero.biography.fullName }}</p>
             </div>
             <div class="card__stats">
               <p class="card-subtitle">{{ 'First appearance' }}</p>
               <p class="first-appearance">
-                {{ hero.biography['first-appearance'] }}
+                {{ hero.biography.firstAppearance }}
               </p>
 
             </div>

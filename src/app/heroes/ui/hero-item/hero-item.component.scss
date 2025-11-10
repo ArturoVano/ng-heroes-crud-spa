@@ -12,7 +12,7 @@
 .card {
   border-radius: 9px;
   border: none;
-  min-width: 228px;
+  // min-width: 228px;
   overflow: hidden;
   box-shadow:
     0 0 2em 0 rgba(59, 130, 246, 0.4),
@@ -35,7 +35,6 @@
     flex-direction: column;
     gap: 8px;
     width: 100%;
-    z-index: 2;
     border-radius: 0 0 9px 9px;
     height: 30%;
     min-height: min-content;
@@ -72,7 +71,7 @@
 
 .chip {
   position: absolute;
-  top: 5px;
+  top: 7px;
   left: 10px;
 }
 

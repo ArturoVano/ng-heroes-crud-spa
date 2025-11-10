@@ -1,8 +1,8 @@
-import { computed, inject, Injectable, Injector, signal } from "@angular/core";
+import { computed, effect, inject, Injectable, Injector, signal } from "@angular/core";
 import { AddHero, Hero, RemoveHero, Response } from "../interfaces/hero";
 import { FormControl } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { catchError, debounceTime, distinctUntilChanged, EMPTY, forkJoin, map, Observable, of, startWith, Subject, switchMap, tap } from "rxjs";
+import { catchError, debounceTime, distinctUntilChanged, EMPTY, forkJoin, interval, map, Observable, of, startWith, Subject, switchMap, tap, throwError } from "rxjs";
 import { environment } from "../../../environments/environment.development";
 import { provideStorageService, StorageService } from "./storage.service";
 import { HttpClient } from "@angular/common/http";
@@ -93,20 +93,21 @@ export class HeroesService {
     this.storage = injector.get(StorageService);
     this.externalStorage = injectorTwo.get(StorageService);
 
+
+
     // reducers
     this.heroesLoaded$
       .pipe(takeUntilDestroyed())
-      .subscribe(({ heroes, localHeroes }) =>{
-        console.log(heroes.length);
-        console.log(Math.ceil(heroes.length / this.HEROES_PER_PAGE));
+      .subscribe(({ heroes, localHeroes }) =>
         this.state.update((state) => ({
           ...state,
           heroes,
           pages: Math.ceil(heroes.length / this.HEROES_PER_PAGE),
           localHeroes,
           status: 'loaded',
+          error: null
         }))
-      });
+      );
 
     this.error$
       .pipe(takeUntilDestroyed())
@@ -120,31 +121,65 @@ export class HeroesService {
 
     this.add$.pipe(
       takeUntilDestroyed(),
-      switchMap((hero) => this.storage.add(hero)),
-      catchError((error) => {
-        this.error$.next(error);
-        return EMPTY;
-      })
-    ).subscribe();
+      switchMap((hero) => this.storage.add(hero))
+    ).subscribe({
+        next: () =>
+          this.state.update((state) => ({
+            ...state,
+            status: 'loading',
+            error: null
+          })),
+        error: (err) => {
+          console.log('Debugging error in add')
+          this.error$.next(err)
+        }
+      });
 
     this.edit$.pipe(
       takeUntilDestroyed(),
       switchMap((hero) => this.storage.edit(hero)),
-      catchError((error) => {
-        this.error$.next(error);
-        return EMPTY;
-      })
-    ).subscribe();
+    ).subscribe({
+        next: () =>
+          this.state.update((state) => ({
+            ...state,
+            status: 'loading',
+            error: null
+          })),
+        error: (err) => {
+          console.log('Debugging error in edit')
+          this.error$.next(err)
+        }
+      });
 
     this.remove$
       .pipe(
         takeUntilDestroyed(),
-        switchMap((hero) => this.storage.remove(hero)),
-        catchError((error) => {
-          this.error$.next(error);
-          return EMPTY;
-        })
-      ).subscribe();
+        switchMap((heroId) => {
+          console.log('holaaa!', heroId);
+          return throwError(() => new Error('Something went wrong!3234'))
+        }),
+        switchMap((heroId) => {
+          console.log('Va a remover de la BD')
+          return this.storage.remove(heroId)
+        }),
+      ).subscribe({
+        next: () =>
+          this.state.update((state) => ({
+            ...state,
+            status: 'loading',
+            error: null
+          })),
+        error: (err) => {
+          console.log('Debugging error in remove')
+          this.error$.next(err)
+        }
+      });
+
+    effect(() => {
+      if (this.status() === 'loading') {
+        this.heroSearchControl.reset();
+      }
+    })
   }
 
   private filterHeroesByTerm(heroes: Hero[], term: string) {
@@ -178,15 +213,24 @@ export class HeroesService {
 
 
   getExternalHeroesList(): Observable<boolean> {
-    const heroRequests: Observable<Hero>[] = [];
+    const heroRequests: Observable<Hero | boolean>[] = [];
     for (let id = 1; id <= this.EXTERNAL_HEROES; id++) {
-      heroRequests.push(this.externalStorage.getById(`id/${id}.json`));
+
+      heroRequests.push(
+        this.externalStorage.getById(`id/${id}.json`)
+        .pipe(catchError(() => {
+          console.log('Error en el item externo: ' + id)
+          return of(false)
+        }))
+      );
+
     }
 
     return forkJoin(heroRequests).pipe(
       switchMap((heroes) => {
+        console.log('primer paso')
         const heroRequest = heroes
-          .filter(hero => !!hero)
+          .filter(hero => !!hero && typeof hero === 'object')
           .map((hero) =>
             this.storage.add(hero).pipe(
               catchError(() => of(false)),
@@ -197,6 +241,7 @@ export class HeroesService {
         return forkJoin(heroRequest).pipe(
           map((resutls) => resutls.some(result => result === true))
         );
+
       })
     );
   }

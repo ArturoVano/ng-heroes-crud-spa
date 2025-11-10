@@ -1,5 +1,5 @@
-import { Component, input, output } from "@angular/core";
-import { Hero } from "../../../shared/interfaces/hero";
+import { Component, computed, input, output } from "@angular/core";
+import { Alignment, Hero } from "../../../shared/interfaces/hero";
 import { NgClass } from "@angular/common";
 
 
@@ -26,23 +26,23 @@ import { NgClass } from "@angular/common";
           }
           <img
             class="hero-image"
-            [src]="'assets/test.jpg'"
+            [src]="hero?.images?.lg ? hero.images!.lg : 'assets/no-image.png'"
             [alt]="hero.name"
           />
         </div>
 
         <div class="detail__details">
-          <h2 class="hero-name">Superman</h2>
-          <p class="hero-fullname">Clark Kent</p>
+          <h2 class="hero-name">{{ hero.name }}</h2>
+          <p class="hero-fullname">{{ hero.biography.fullName }}</p>
 
           <div class="detail__content">
             <div class="detail__block">
-              <div class="label">Alter Egos</div>
-              <div class="value">{{ hero.biography['alter-egos'] }}</div>
+              <div class="label" [class.label--red]="isBad()">Alter Egos</div>
+              <div class="value">{{ hero.biography.alterEgos }}</div>
             </div>
 
             <div class="detail__block">
-              <div class="label">Aliases</div>
+              <div class="label" [class.label--red]="isBad()">Aliases</div>
               <div class="aliases-list">
                 @for (alias of hero.biography.aliases; track $index) {
                   <span class="chip">{{ alias }}</span>
@@ -51,13 +51,13 @@ import { NgClass } from "@angular/common";
             </div>
 
             <div class="detail__block">
-              <div class="label">First Appearance</div>
-              <div class="value">{{ hero.biography['first-appearance']  }}</div>
+              <div class="label" [class.label--red]="isBad()">First Appearance</div>
+              <div class="value">{{ hero.biography.firstAppearance }}</div>
             </div>
 
             <div class="detail__block">
-                <div class="label">Publisher</div>
-                <div class="value">DC Comics</div>
+                <div class="label" [class.label--red]="isBad()">Publisher</div>
+                <div class="value">{{ hero.biography.publisher }}</div>
             </div>
           </div>
         </div>
@@ -70,6 +70,10 @@ import { NgClass } from "@angular/common";
 export class HeroDetailComponent {
   hero = input.required<Hero>();
   close = output();
+
+  isBad = computed(() =>
+    this.hero().biography.alignment === Alignment.BAD
+  );
 }
 
 

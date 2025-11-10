@@ -1,14 +1,14 @@
 
 export interface Hero {
-  id:          string;
-  name:         string;
+  id: number;
+  name: string;
   slug?: string;
   powerstats?:  Powerstats;
   appearance?:  Appearance;
   biography:    Biography;
   work?:        Work;
   connections?: Connections;
-  image?:       Image;
+  images?:       Image;
 }
 
 export interface Appearance {
@@ -21,11 +21,11 @@ export interface Appearance {
 }
 
 export interface Biography {
-  "full-name"?:        string;
-  "alter-egos"?:       string;
+  fullName?:        string;
+  alterEgos?:       string;
   aliases?:            string[];
-  "place-of-birth"?:   string;
-  "first-appearance"?: string;
+  placeOfBirth?:   string;
+  firstAppearance?: string;
   publisher:           string;
   alignment:           Alignment;
 }

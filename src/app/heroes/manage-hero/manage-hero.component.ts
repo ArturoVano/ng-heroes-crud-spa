@@ -2,7 +2,7 @@ import { Component, computed, effect, inject } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { HeroesService } from "../../shared/data-access/heroes.service";
 import { toSignal } from "@angular/core/rxjs-interop";
-import { Hero } from "../../shared/interfaces/hero";
+import { AddHero, Hero } from "../../shared/interfaces/hero";
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { LucideAngularModule } from "lucide-angular";
 import { HttpClient } from "@angular/common/http";
@@ -11,10 +11,10 @@ import { HttpClient } from "@angular/common/http";
 interface HeroFormModel {
   name: FormControl<string>;
   biography: FormGroup<{
-    'full-name': FormControl<string>;
-    'alter-egos': FormControl<string>;
+    fullName: FormControl<string>;
+    alterEgos: FormControl<string>;
     aliases: FormControl<string[]>;
-    'first-appearance': FormControl<string>;
+    firstAppearance: FormControl<string>;
     publisher: FormControl<string>;
     alignment: FormControl<string>;
   }>;
@@ -40,7 +40,7 @@ interface HeroFormModel {
         </div>
 
         <div class="manage-hero__btn">
-          <button class="btn btn--blue" routerLink="/heroes">
+          <button class="btn btn--green" routerLink="/heroes">
             <lucide-icon name="arrow-left" />
             Back to list
           </button>
@@ -69,7 +69,7 @@ interface HeroFormModel {
                 <input
                   id="full-name"
                   type="text"
-                  formControlName="full-name"
+                  formControlName="fullName"
                 />
               </div>
               <div class="form-field">
@@ -77,7 +77,7 @@ interface HeroFormModel {
                 <input
                   id="alter-ego"
                   type="text"
-                  formControlName="alter-egos"
+                  formControlName="alterEgos"
                 />
               </div>
               <div class="form-field">
@@ -86,7 +86,7 @@ interface HeroFormModel {
                   id="appearence"
                   type="text"
                   placeholder="e.g., ACTION COMICS #1"
-                  formControlName="first-appearance"
+                  formControlName="firstAppearance"
                 />
               </div>
               <!-- <div class="form-field">
@@ -144,16 +144,19 @@ interface HeroFormModel {
           <div class="actions">
             @if (heroId()) {
               <button
-                class="btn btn--fill btn--red actions__remove"
-                (click)="heroesService.remove$.next(heroId()!)"
+                class="btn actions__remove"
+                (click)="
+                  heroesService.remove$.next(heroId())
+                "
               >
                 Delete
               </button>
             }
             <button
-              class="btn btn--fill btn--blue actions__save"
+              class="btn btn--primary actions__save"
               type="submit"
               [disabled]="heroForm.invalid"
+              [tabIndex]="heroForm.invalid ? -1 : 0"
             >
               Save
             </button>
@@ -163,10 +166,10 @@ interface HeroFormModel {
         <div class="image-section">
           <div class="form-group">
             <div class="image-preview" id="image-preview">
-              <!-- <img
-                [src]="hero()?.image?.lg ? hero()!.image!.lg : 'assets/no-image.png'"
+              <img
+                [src]="hero()?.images?.lg ? hero()!.images!.lg : 'assets/no-image.png'"
                 [alt]="'Hero image'"
-                /> -->
+                />
             </div>
           </div>
         </div>
@@ -190,12 +193,12 @@ export default class ManageHeroComponent {
 
   publishers = toSignal(this.heroesService.getPublishers());
   params = toSignal(this.route.paramMap);
-  heroId = computed(() => this.params()?.get('id'));
+  heroId = computed(() => Number(this.params()?.get('id')));
 
   hero = computed<Hero | null>(() =>
     !!this.heroId()
       ? this.heroesService.heroes().find(
-          ({id}) => id === this.params()?.get('id')
+          ({id}) => Number(id) === this.heroId()
         ) ?? null
       : null
   );
@@ -203,13 +206,13 @@ export default class ManageHeroComponent {
   heroForm : FormGroup<HeroFormModel> = this.fb.group({
     name: this.fb.control('', { validators: Validators.required, nonNullable: true }),
     biography: this.fb.group({
-      'full-name': this.fb.control('', { nonNullable: true }),
-      'alter-egos': this.fb.control('', { nonNullable: true }),
+      fullName: this.fb.control('', { nonNullable: true }),
+      alterEgos: this.fb.control('', { nonNullable: true }),
       aliases: this.fb.control<string[]>([], {
         validators: Validators.minLength(3),
         nonNullable: true
       }),
-      'first-appearance': this.fb.control('', { nonNullable: true }),
+      firstAppearance: this.fb.control('', { nonNullable: true }),
       publisher: this.fb.control('', { validators: Validators.required, nonNullable: true }),
       alignment: this.fb.control('', { validators: Validators.required, nonNullable: true }),
     }),
@@ -232,14 +235,23 @@ export default class ManageHeroComponent {
         this.heroForm.patchValue({
           name: hero.name,
           biography: {
-            ['full-name']: hero.biography['full-name'],
-            ['alter-egos']: hero.biography['alter-egos'],
+            fullName: hero.biography.fullName,
+            alterEgos: hero.biography.alterEgos,
             aliases: hero.biography['aliases'],
-            ['first-appearance']: hero.biography['first-appearance'],
+            firstAppearance: hero.biography.firstAppearance,
             publisher: hero.biography.publisher,
             alignment: hero.biography.alignment,
           }
         });
+      }
+    });
+
+    effect(() => {
+      if (
+        !this.heroesService.error() &&
+        this.heroesService.status() === 'loading'
+      ) {
+        this.router.navigate(['heroes']);
       }
     });
   }
@@ -256,24 +268,19 @@ export default class ManageHeroComponent {
       this.heroesService.edit$.next({
         ...this.hero()!,
         ...this.heroForm.getRawValue(),
-        image: { lg: newImage }
+        images: { lg: newImage }
       } as Hero);
     } else {
       this.heroesService.add$.next(
         {
           ...this.heroForm.getRawValue(),
-          image: { lg: newImage }
-        } as Hero
+          images: { lg: newImage }
+        } as AddHero
       );
     }
     // TODO: every source action should first put status to loading
     // to avoid the next if to be true if the API response is slow, and its
     // possible error, is slow. Use timers to test it an ensure redirection awaits.
-    if (
-      !this.heroesService.error() &&
-      this.heroesService.status() === 'loaded'
-    ) {
-      this.router.navigate(['heroes']);
-    }
   }
+
 }
