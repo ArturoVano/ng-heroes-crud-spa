@@ -197,7 +197,7 @@ export class HeroesService {
     const publishers: Observable<string>[] = [];
     for (let i = 1; i <= this.EXTERNAL_HEROES; i++) {
       publishers.push(
-        this.externalStorage.getById(i).pipe(
+        this.externalStorage.getById(`id/${i}.json`).pipe(
           map((hero) => hero.biography.publisher)
         )
       );

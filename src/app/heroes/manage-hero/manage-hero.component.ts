@@ -115,20 +115,25 @@ interface HeroFormModel {
               </div> -->
               <div class="form-field">
                 <label for="alignment">Alignment</label>
-
+                <span>{{ heroForm.controls.biography.controls.alignment.value }}</span>
                 <div class="alignment-select">
-                    <button
+                  <label class=""></label>
+                    <input
+                      type="radio"
+                      alignment-select__option
+                      formControlName="alignment"
+                      [value]="'good'"
                       class="alignment-select__option"
-                      [class.selected]="">
-                      {{ 'Good' }}
-                    </button>
-                    <button
-                    class="alignment-select__option"
-                    [class.selected]="">
-                      {{ 'Bad' }}
-                    </button>
-                </div>
+                    />
 
+                    <input
+                      type="radio"
+                      alignment-select__option
+                      formControlName="alignment"
+                      [value]="'bad'"
+                      class="alignment-select__option"
+                    />
+                </div>
               </div>
             </div>
           <div class="form-field image" formGroupName="image">
@@ -156,7 +161,6 @@ interface HeroFormModel {
               class="btn btn--primary actions__save"
               type="submit"
               [disabled]="heroForm.invalid"
-              [tabIndex]="heroForm.invalid ? -1 : 0"
             >
               Save
             </button>
