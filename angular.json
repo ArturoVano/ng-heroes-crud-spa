@@ -13,7 +13,7 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "hero",
       "architect": {
         "build": {
           "builder": "@angular/build:application",

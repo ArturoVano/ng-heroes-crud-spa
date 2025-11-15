@@ -3,25 +3,12 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { HeroesService } from "../../shared/data-access/heroes.service";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { AddHero, Hero } from "../../shared/interfaces/hero";
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { LucideAngularModule } from "lucide-angular";
 import { HttpClient } from "@angular/common/http";
+import { AliasesControlComponent } from "./ui/detail-control/hero-aliases-control.component";
+import { HeroFormModel } from "../interfaces/hero-form";
 
-
-interface HeroFormModel {
-  name: FormControl<string>;
-  biography: FormGroup<{
-    fullName: FormControl<string>;
-    alterEgos: FormControl<string>;
-    aliases: FormControl<string[]>;
-    firstAppearance: FormControl<string>;
-    publisher: FormControl<string>;
-    alignment: FormControl<string>;
-  }>;
-  image: FormGroup<{
-    url: FormControl<string>;
-  }>;
-}
 
 @Component({
   selector: 'manage-hero',
@@ -89,51 +76,32 @@ interface HeroFormModel {
                   formControlName="firstAppearance"
                 />
               </div>
-              <!-- <div class="form-field">
-                <label for="aliases">Aliases</label>
-                <div class="aliases-input">
-                  <input
-                    id="aliases"
-                    type="text"
-                    formControlName="aliases"
-                    placeholder="Add any alias as yoy want..."
-                  />
-                  <button class="btn">
-                    <lucide-icon name="plus"/>
-                  </button>
-                </div>
-                <div class="aliases-list">
-                  @for (alias of aliases; track $index) {
-                    <div class="chip">
-                      {{ alias }}
-                      <button>
-                        <lucide-icon name="x"></lucide-icon>
-                      </button>
-                    </div>
-                  }
-                </div>
-              </div> -->
-              <div class="form-field">
-                <label for="alignment">Alignment</label>
-                <span>{{ heroForm.controls.biography.controls.alignment.value }}</span>
-                <div class="alignment-select">
-                  <label class=""></label>
-                    <input
-                      type="radio"
-                      alignment-select__option
-                      formControlName="alignment"
-                      [value]="'good'"
-                      class="alignment-select__option"
-                    />
 
-                    <input
-                      type="radio"
-                      alignment-select__option
-                      formControlName="alignment"
-                      [value]="'bad'"
-                      class="alignment-select__option"
-                    />
-                </div>
+              <pre>{{ heroForm.controls.biography.controls.aliases.value }}</pre>
+              <hero-aliases-control 
+                [aliases]="heroForm.controls.biography.controls.aliases.value"
+                (outputValue)="heroForm.controls.biography.controls.aliases.setValue($event)"
+              />
+
+              <label>Alignment</label>
+              <div class="alignment-select">
+                <label class="alignment-select__option">
+                  <input
+                    type="radio"
+                    formControlName="alignment"
+                    [value]="'good'"
+                  />
+                  <span class="alignment-select__label">Good</span>
+                </label>
+
+                <label class="alignment-select__option">
+                  <input
+                    type="radio"
+                    formControlName="alignment"
+                    [value]="'bad'"
+                  />
+                  <span class="alignment-select__label">Bad</span>
+                </label>
               </div>
             </div>
           <div class="form-field image" formGroupName="image">
@@ -186,6 +154,7 @@ interface HeroFormModel {
     RouterLink,
     ReactiveFormsModule,
     LucideAngularModule,
+    AliasesControlComponent,
   ],
 })
 export default class ManageHeroComponent {
@@ -241,7 +210,7 @@ export default class ManageHeroComponent {
           biography: {
             fullName: hero.biography.fullName,
             alterEgos: hero.biography.alterEgos,
-            aliases: hero.biography['aliases'],
+            aliases: hero.biography.aliases,
             firstAppearance: hero.biography.firstAppearance,
             publisher: hero.biography.publisher,
             alignment: hero.biography.alignment,

@@ -155,10 +155,11 @@
         "fullName": "Adam Strange",
         "alterEgos": "No alter egos found.",
         "aliases": [
-          "Warrior of Two Worlds",
-          "Savior of Rann"
+          "Prueba",
+          "Prueba 2",
+          "Prueba 3",
+          "Prueba 4"
         ],
-        "placeOfBirth": "Chicago, Illinois",
         "firstAppearance": "Outsiders #6 (April, 1986)",
         "publisher": "DC Comics",
         "alignment": "good"
@@ -172,10 +173,10 @@
         "relatives": "Alanna Strange (wife); Aleea Strange (daughter); Sardath (father-in-law); Janey Strange (sister); Todd Strange (brother, deceased); Bantteir (mother-in-law); Adam Strange II (descendent)"
       },
       "images": {
-        "xs": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/xs/8-adam-strange.jpg",
-        "sm": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/8-adam-strange.jpg",
-        "md": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/8-adam-strange.jpg",
-        "lg": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/8-adam-strange.jpg"
+        "lg": ""
+      },
+      "image": {
+        "url": ""
       }
     },
     {
@@ -213,7 +214,6 @@
           "Bob",
           "agent of A.I.M"
         ],
-        "placeOfBirth": "-",
         "firstAppearance": "Cable & Deadpool #38 (May, 2007)",
         "publisher": "Marvel Comics",
         "alignment": "good"
@@ -227,10 +227,10 @@
         "relatives": "Allison (ex-wife); Terry and Howie (sons)"
       },
       "images": {
-        "xs": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/xs/10-agent-bob.jpg",
-        "sm": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/10-agent-bob.jpg",
-        "md": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/10-agent-bob.jpg",
-        "lg": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/10-agent-bob.jpg"
+        "lg": ""
+      },
+      "image": {
+        "url": ""
       }
     },
     {
@@ -263,9 +263,10 @@
         "fullName": "Gabriel Lan",
         "alterEgos": "No alter egos found.",
         "aliases": [
-          "-"
+          "-",
+          "Prueba",
+          "Otra prueba"
         ],
-        "placeOfBirth": "Xandar, a planet in the Tranta system, Andromeda galaxy",
         "firstAppearance": "Fantastic Four #120",
         "publisher": "Marvel Comics",
         "alignment": "bad"
@@ -279,10 +280,10 @@
         "relatives": "-"
       },
       "images": {
-        "xs": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/xs/12-air-walker.jpg",
-        "sm": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/12-air-walker.jpg",
-        "md": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/12-air-walker.jpg",
-        "lg": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/12-air-walker.jpg"
+        "lg": ""
+      },
+      "image": {
+        "url": ""
       }
     },
     {

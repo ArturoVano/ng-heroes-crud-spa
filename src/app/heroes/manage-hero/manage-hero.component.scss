@@ -7,6 +7,11 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 40px;
+
+    @include respond(phone) {
+      flex-direction: column;
+      gap: 2rem;
+    }
   }
 
   &__title {
@@ -74,67 +79,45 @@
   }
 }
 
-.aliases-input {
-  display: flex;
-  gap: 1.2rem;
-  margin-bottom: 12px;
-
-  button {
-    width: 60px;
-    display: flex;
-    justify-content: center;
-  }
-}
-
-.aliases-list {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #6b7280;
-    transition: color 0.3s;
-    font-weight: 500;
-
-    &:hover {
-      color: var(--neon-red);
-    }
-
-    lucide-icon {
-      width: 20px;
-    }
-  }
-}
-
 .alignment-select {
   display: flex;
   justify-content: flex-start;
   gap: 1rem;
 
   &__option {
-    padding: 1rem 2.5rem;
-    border: 2px solid #2a2a2a;
-    border-radius: 12px;
-    text-align: center;
+    position: relative;
     cursor: pointer;
-    transition: all 0.3s;
-    font-weight: 600;
-    color: #8a8a8a;
+
+    input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+
+      &:checked + .alignment-select__label {
+        border-color: var(--green);
+        color: var(--green);
+        background: rgba(0, 255, 157, 0.05);
+      }
+    }
 
     &:not(.selected):hover {
       filter: brightness(1.6);
     }
+  }
 
-    &.selected {
-      border-color: var(--green);
-      color: var(--green);
-      background: rgba(0, 255, 157, 0.05);
-    }
+  &__label {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 2px solid #2a2a2a;
+    border-radius: 12px;
+    background-color: transparent;
+    color: #8a8a8a;
+    font-weight: 500;
+    transition: all 0.3s ease;
   }
 }
+
 .actions {
   padding: 1.5rem;
   display: flex;
@@ -146,27 +129,6 @@
   }
 
   &__remove {
-  }
-}
-
-input {
-  width: 100%;
-  background: #0a0a0a;
-  border: 1px solid #2a2a2a;
-  border-radius: 12px;
-  padding: 14px 16px;
-  color: #fff;
-  transition: all 0.3s;
-  font-family: inherit;
-
-  &:focus {
-    outline: none;
-    border-color: var(--green);
-    box-shadow: 0 0 0 3px rgba(0, 255, 157, 0.1);
-  }
-
-  &::placeholder {
-    color: #4a4a4a;
   }
 }
 
