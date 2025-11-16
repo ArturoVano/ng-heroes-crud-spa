@@ -172,13 +172,12 @@ export default class ManageHeroComponent {
   params = toSignal(this.route.paramMap);
   heroId = computed(() => this.params()?.get('id'));
 
-  hero = computed<Hero | null>(() =>{
-    console.log('esta calculando el heroe en la ruta: ', this.heroId())
-    return !!this.heroId()
+  hero = computed<Hero | null>(() =>
+    !!this.heroId()
       ? this.heroesService.heroes().find(
           ({id}) => id.toString() === this.heroId()
         ) ?? null
-      : null}
+      : null
   );
 
   heroForm : FormGroup<HeroFormModel> = this.fb.group({
