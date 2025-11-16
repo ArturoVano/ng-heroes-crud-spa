@@ -6,9 +6,7 @@ import { AddHero, Hero } from "../../shared/interfaces/hero";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { LucideAngularModule } from "lucide-angular";
 import { HttpClient } from "@angular/common/http";
-import { AliasesControlComponent } from "./ui/detail-control/hero-aliases-control.component";
 import { HeroFormModel } from "../interfaces/hero-form";
-
 
 @Component({
   selector: 'manage-hero',
@@ -49,40 +47,46 @@ import { HeroFormModel } from "../interfaces/hero-form";
               class="show-uppercase"
             />
           </div>
-          <!-- <div class="form-group biography" formGroupName="biography"> -->
-            <div formGroupName="biography">
-              <div class="form-field">
-                <label for="full-name">Full name</label>
-                <input
-                  id="full-name"
-                  type="text"
-                  formControlName="fullName"
-                />
-              </div>
-              <div class="form-field">
-                <label for="alter-ego">Alter ego</label>
-                <input
-                  id="alter-ego"
-                  type="text"
-                  formControlName="alterEgos"
-                />
-              </div>
-              <div class="form-field">
-                <label for="appearence">First appearence</label>
-                <input
-                  id="appearence"
-                  type="text"
-                  placeholder="e.g., ACTION COMICS #1"
-                  formControlName="firstAppearance"
-                />
-              </div>
-
-              <pre>{{ heroForm.controls.biography.controls.aliases.value }}</pre>
-              <hero-aliases-control 
-                [aliases]="heroForm.controls.biography.controls.aliases.value"
-                (outputValue)="heroForm.controls.biography.controls.aliases.setValue($event)"
+          <div formGroupName="biography">
+            <div class="form-field">
+              <label for="full-name">Full name</label>
+              <input
+                id="full-name"
+                type="text"
+                formControlName="fullName"
               />
+            </div>
+            <div class="form-field">
+              <label for="alter-ego">Alter ego</label>
+              <input
+                id="alter-ego"
+                type="text"
+                formControlName="alterEgos"
+              />
+            </div>
+            <div class="form-field">
+              <label for="appearence">First appearence</label>
+              <input
+                id="appearence"
+                type="text"
+                placeholder="e.g., ACTION COMICS #1"
+                formControlName="firstAppearance"
+              />
+            </div>
 
+            <div class="form-field">
+              <label for="publisher">Publisher</label>
+              <select formControlName="publisher" id="publisher">
+                <button>
+                  <selectedcontent></selectedcontent>
+                </button>
+                @for (publisher of publishers(); track $index) {
+                  <option [value]="publisher">{{ publisher }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-field">
               <label>Alignment</label>
               <div class="alignment-select">
                 <label class="alignment-select__option">
@@ -104,6 +108,8 @@ import { HeroFormModel } from "../interfaces/hero-form";
                 </label>
               </div>
             </div>
+          </div>
+
           <div class="form-field image" formGroupName="image">
             <label for="image">Image url</label>
             <input
@@ -119,7 +125,7 @@ import { HeroFormModel } from "../interfaces/hero-form";
               <button
                 class="btn actions__remove"
                 (click)="
-                  heroesService.remove$.next(heroId())
+                  heroesService.remove$.next(heroId()!)
                 "
               >
                 Delete
@@ -145,7 +151,6 @@ import { HeroFormModel } from "../interfaces/hero-form";
             </div>
           </div>
         </div>
-
       </div>
     </div>
   `,
@@ -154,7 +159,6 @@ import { HeroFormModel } from "../interfaces/hero-form";
     RouterLink,
     ReactiveFormsModule,
     LucideAngularModule,
-    AliasesControlComponent,
   ],
 })
 export default class ManageHeroComponent {
@@ -166,14 +170,15 @@ export default class ManageHeroComponent {
 
   publishers = toSignal(this.heroesService.getPublishers());
   params = toSignal(this.route.paramMap);
-  heroId = computed(() => Number(this.params()?.get('id')));
+  heroId = computed(() => this.params()?.get('id'));
 
-  hero = computed<Hero | null>(() =>
-    !!this.heroId()
+  hero = computed<Hero | null>(() =>{
+    console.log('esta calculando el heroe en la ruta: ', this.heroId())
+    return !!this.heroId()
       ? this.heroesService.heroes().find(
-          ({id}) => Number(id) === this.heroId()
+          ({id}) => id.toString() === this.heroId()
         ) ?? null
-      : null
+      : null}
   );
 
   heroForm : FormGroup<HeroFormModel> = this.fb.group({
@@ -181,10 +186,6 @@ export default class ManageHeroComponent {
     biography: this.fb.group({
       fullName: this.fb.control('', { nonNullable: true }),
       alterEgos: this.fb.control('', { nonNullable: true }),
-      aliases: this.fb.control<string[]>([], {
-        validators: Validators.minLength(3),
-        nonNullable: true
-      }),
       firstAppearance: this.fb.control('', { nonNullable: true }),
       publisher: this.fb.control('', { validators: Validators.required, nonNullable: true }),
       alignment: this.fb.control('', { validators: Validators.required, nonNullable: true }),
@@ -193,12 +194,6 @@ export default class ManageHeroComponent {
       url: this.fb.control('', { nonNullable: true }),
     })
   });
-
-
-  get aliases() {
-    const value = this.heroForm.controls.biography.controls.aliases.value
-    return value ?? [];
-  }
 
   constructor() {
     effect(() => {
@@ -210,11 +205,11 @@ export default class ManageHeroComponent {
           biography: {
             fullName: hero.biography.fullName,
             alterEgos: hero.biography.alterEgos,
-            aliases: hero.biography.aliases,
             firstAppearance: hero.biography.firstAppearance,
             publisher: hero.biography.publisher,
             alignment: hero.biography.alignment,
-          }
+          },
+          image: { url: hero.images?.lg }
         });
       }
     });
@@ -251,9 +246,5 @@ export default class ManageHeroComponent {
         } as AddHero
       );
     }
-    // TODO: every source action should first put status to loading
-    // to avoid the next if to be true if the API response is slow, and its
-    // possible error, is slow. Use timers to test it an ensure redirection awaits.
   }
-
 }

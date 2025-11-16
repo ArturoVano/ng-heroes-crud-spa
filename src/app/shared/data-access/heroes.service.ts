@@ -1,8 +1,8 @@
 import { computed, effect, inject, Injectable, Injector, signal } from "@angular/core";
-import { AddHero, Hero, RemoveHero, Response } from "../interfaces/hero";
+import { AddHero, Hero, RemoveHero } from "../interfaces/hero";
 import { FormControl } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { catchError, debounceTime, distinctUntilChanged, EMPTY, forkJoin, interval, map, Observable, of, startWith, Subject, switchMap, tap, throwError } from "rxjs";
+import { catchError, debounceTime, EMPTY, forkJoin, map, Observable, of, startWith, Subject, switchMap, tap } from "rxjs";
 import { environment } from "../../../environments/environment.development";
 import { provideStorageService, StorageService } from "./storage.service";
 import { HttpClient } from "@angular/common/http";
@@ -54,7 +54,6 @@ export class HeroesService {
   private error$ = new Subject<string | null>();
   searchChanged$ = this.heroSearchControl.valueChanges.pipe(
     debounceTime(300),
-    distinctUntilChanged(),
     startWith('')
   );
 
@@ -92,8 +91,6 @@ export class HeroesService {
 
     this.storage = injector.get(StorageService);
     this.externalStorage = injectorTwo.get(StorageService);
-
-
 
     // reducers
     this.heroesLoaded$
@@ -154,14 +151,7 @@ export class HeroesService {
     this.remove$
       .pipe(
         takeUntilDestroyed(),
-        switchMap((heroId) => {
-          console.log('holaaa!', heroId);
-          return throwError(() => new Error('Something went wrong!3234'))
-        }),
-        switchMap((heroId) => {
-          console.log('Va a remover de la BD')
-          return this.storage.remove(heroId)
-        }),
+        switchMap((heroId) => this.storage.remove(heroId)),
       ).subscribe({
         next: () =>
           this.state.update((state) => ({
@@ -170,14 +160,14 @@ export class HeroesService {
             error: null
           })),
         error: (err) => {
-          console.log('Debugging error in remove')
+          console.error('Error on removing a hero')
           this.error$.next(err)
         }
       });
 
     effect(() => {
       if (this.status() === 'loading') {
-        this.heroSearchControl.reset();
+        this.heroSearchControl.reset('');
       }
     })
   }
@@ -198,19 +188,22 @@ export class HeroesService {
     for (let i = 1; i <= this.EXTERNAL_HEROES; i++) {
       publishers.push(
         this.externalStorage.getById(`id/${i}.json`).pipe(
-          map((hero) => hero.biography.publisher)
+          map((hero) => hero.biography.publisher),
+          catchError(() => {
+            console.log('An error getting a publisher has ocurred');
+            return of('');
+          })
         )
       );
     }
     return forkJoin(publishers).pipe(
-      map(publishers => Array.from(new Set(publishers))),
+      map(publishers => Array.from(new Set(publishers.filter(r => r !== '')))),
       tap((publishers) => this.localStorage.setItem(
         'publishers',
         JSON.stringify(publishers)
       ))
     );
   }
-
 
   getExternalHeroesList(): Observable<boolean> {
     const heroRequests: Observable<Hero | boolean>[] = [];
@@ -219,7 +212,7 @@ export class HeroesService {
       heroRequests.push(
         this.externalStorage.getById(`id/${id}.json`)
         .pipe(catchError(() => {
-          console.log('Error en el item externo: ' + id)
+          console.log('Error in the external: ' + id)
           return of(false)
         }))
       );
@@ -241,7 +234,6 @@ export class HeroesService {
         return forkJoin(heroRequest).pipe(
           map((resutls) => resutls.some(result => result === true))
         );
-
       })
     );
   }

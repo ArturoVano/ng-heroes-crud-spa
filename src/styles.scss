@@ -68,3 +68,7 @@ button {
 ::-webkit-scrollbar-thumb:hover {
   background: #3a3a3a;
 }
+
+.cdk-overlay-container {
+  backdrop-filter: blur(6px);
+}

@@ -40,7 +40,7 @@ import { take } from "rxjs";
         <div class="actions_add">
           <button
             routerLink="./add"
-            class="actions__add btn btn--fill btn--blue"
+            class="actions__add btn btn--blue"
           >
             <lucide-icon name="plus" />
             New hero
@@ -49,7 +49,7 @@ import { take } from "rxjs";
       </div>
 
       <div class="heroes-grid">
-        @for (hero of paginatedHeroes(); track hero) {
+        @for (hero of paginatedHeroes(); track hero.id) {
           <hero-item
             [hero]="hero"
             (detail)="openDetail.set(hero)"

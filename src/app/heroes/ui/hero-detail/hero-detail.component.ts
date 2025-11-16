@@ -2,7 +2,6 @@ import { Component, computed, input, output } from "@angular/core";
 import { Alignment, Hero } from "../../../shared/interfaces/hero";
 import { NgClass } from "@angular/common";
 
-
 @Component({
   selector: 'hero-detail',
   template: `

@@ -1,6 +1,4 @@
 import { Component } from "@angular/core";
-import { RouterLink } from "@angular/router";
-
 
 @Component({
   selector: 'hero-footer',
@@ -26,7 +24,6 @@ import { RouterLink } from "@angular/router";
     </div>
   `,
   styleUrls: ['footer.component.scss'],
-  imports: [RouterLink]
 })
 export class FooterComponent {
 }

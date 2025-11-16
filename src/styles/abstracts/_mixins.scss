@@ -29,3 +29,18 @@
     @media (min-width: 112.5em) { @content };
   }
 }
+
+@mixin respond-down($breakpoint) {
+  @if $breakpoint == phone { // 600
+    @media (min-width: 37.5em) { @content };
+  }
+  @if $breakpoint == tab-port { // 901.6px
+    @media (min-width: 56.35em) { @content };
+  }
+  @if $breakpoint == tab-land { // 1200
+    @media (min-width: 75em) { @content };
+  }
+  @if $breakpoint == big-desktop {
+    @media (min-width: 112.5em) { @content };
+  }
+}

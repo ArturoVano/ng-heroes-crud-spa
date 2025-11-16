@@ -1,6 +1,6 @@
 
 export interface Hero {
-  id: number;
+  id: string;
   name: string;
   slug?: string;
   powerstats?:  Powerstats;
