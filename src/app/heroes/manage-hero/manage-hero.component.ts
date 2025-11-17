@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { LucideAngularModule } from "lucide-angular";
 import { HttpClient } from "@angular/common/http";
 import { HeroFormModel } from "../interfaces/hero-form";
+import { NgOptimizedImage } from "@angular/common";
 
 @Component({
   selector: 'manage-hero',
@@ -145,7 +146,10 @@ import { HeroFormModel } from "../interfaces/hero-form";
           <div class="form-group">
             <div class="image-preview" id="image-preview">
               <img
-                [src]="hero()?.images?.lg ? hero()!.images!.lg : 'assets/no-image.png'"
+                [ngSrc]="hero()?.images?.lg ? hero()!.images!.lg! : 'assets/no-image.png'"
+                width="480"
+                height="640"
+                priority
                 [alt]="'Hero image'"
                 />
             </div>
@@ -159,6 +163,7 @@ import { HeroFormModel } from "../interfaces/hero-form";
     RouterLink,
     ReactiveFormsModule,
     LucideAngularModule,
+    NgOptimizedImage
   ],
 })
 export default class ManageHeroComponent {

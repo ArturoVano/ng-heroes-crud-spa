@@ -1,6 +1,6 @@
 import { Component, input, output } from "@angular/core";
 import { Hero } from "../../../shared/interfaces/hero";
-import { NgClass } from "@angular/common";
+import { NgClass, NgOptimizedImage } from "@angular/common";
 
 @Component({
   selector: 'hero-item',
@@ -22,9 +22,11 @@ import { NgClass } from "@angular/common";
           }
 
           <img class="card__image"
-            [src]="hero?.images?.lg ? hero.images!.lg : 'assets/no-image.png'"
-            [alt]="'Hero image'"
-            [alt]="hero.name" />
+            [ngSrc]="hero?.images?.lg ? hero.images!.lg! : 'assets/no-image.png'"
+            width="480"
+            height="640"
+            priority
+            [alt]="'Hero image'"/>
 
           <div class="card__content">
             <div class="card__info">
@@ -44,7 +46,7 @@ import { NgClass } from "@angular/common";
     }
   `,
   styleUrls: ['hero-item.component.scss'],
-  imports: [NgClass]
+  imports: [NgClass, NgOptimizedImage]
 })
 export class HeroItemComponent {
   hero = input.required<Hero>();
