@@ -55,18 +55,6 @@
   display: grid;
   gap: 2rem;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-
-  // @include respond-down(tab-land) {
-    // grid-template-columns: repeat(4, 1fr);
-  // }
-//
-  // @include respond-down(tab-port) {
-    // grid-template-columns: repeat(3, 1fr);
-  // }
-//
-  // @include respond-down(big-desktop) {
-    // grid-template-columns: repeat(5, 1fr);
-  // }
 }
 
 .search-box {
